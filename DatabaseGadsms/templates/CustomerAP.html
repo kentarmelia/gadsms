@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+<head>
+	<link rel="shortcut icon" type="x-icon" href="{{ url_for('static', filename='images/gadsms_logo.png') }}">
+	<title>GadSMS: Gadget Shop Management Shop</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/CustomerAP.css') }}">
+	<script src="https://kit.fontawesome.com/05f5e3eb98.js" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sidebar">
+			<img src="{{ url_for('static', filename='images/gadsms_logo.png') }}">
+		<ul>
+			<li><a href="{{ url_for('customerap')}}">Appointment</a></li>
+			<li><a href="{{ url_for('customerma')}}">My Account</a></li>
+			
+		</ul>
+		<div class="social_media">
+			<a href="#"><i class="fa-brands fa-facebook"></i></a>
+			<a href="#"><i class="fa-brands fa-google"></i></a>
+			<a href="#"><i class="fa-brands fa-twitter"></i></a>
+
+		</div>
+
+	</div>
+	<div class="main_content">
+		<div class="header">
+			{% if message!="ok" %}
+			<p>Name : {{ message}}</p>
+			{% endif %}
+			<p>ID no. :</p>
+			<button><b><a href="/logout">LOG-OUT</a></b></button>
+		</div>
+		<input type="button" name="" value="Book" class="bookitem">
+		<input type="text" name="" placeholder="Search here..." class="search">
+		<form>
+			<select name="Filter by" class="filter">
+				<option value="1">Filter</option>
+				<option value="2">Filter</option>
+				<option value="3">Filter</option>
+				<option value="4">Filter</option>
+			</select>
+		</form>
+		<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+		<br><br>
+		<div class="info">
+			
+				<p>APPOINTMENT ID</p>
+				<p>AGENDA</p>
+				<p>START DATE</p>
+				<p>END DATE</p>
+			
+		</div>
+		<div class="info1">
+			
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00765433</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gadget Repair</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/26/21</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/26/21</p>
+		</div>
+		<div class="info2">
+			
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00765435</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gadget Repair</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/26/11</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/26/21</p>
+		</div>
+		</div>
+
+	</div>
+
+</body>
+{% endblock %}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" type="x-icon" href="{{ url_for('static', filename='images/gadsms_logo.png') }}">
+	<title>GadSMS: Gadget Shop Management Shop</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/AdminVC.css') }}">
+	<script src="https://kit.fontawesome.com/05f5e3eb98.js" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sidebar">
+			<img src="{{ url_for('static', filename='images/gadsms_logo.png') }}">
+		<ul>
+			<li><a href="{{ url_for('adminhp')}}">Home</a></li>
+			<li><a href="{{ url_for('adminin')}}">Inventory</a></li>
+			<li><a href="{{ url_for('adminvs')}}">View Sales</a></li>
+			<li><a href="{{ url_for('adminap')}}">Appointment</a></li>
+			<li><a href="{{ url_for('adminem')}}">Employees</a></li>
+			<li><a href="{{ url_for('adminvc')}}">View Customer</a></li>
+			<li><a href="{{ url_for('admindi')}}">Defect Items</a></li>
+		</ul>
+		<div class="social_media">
+			<a href="#"><i class="fa-brands fa-facebook"></i></a>
+			<a href="#"><i class="fa-brands fa-google"></i></a>
+			<a href="#"><i class="fa-brands fa-twitter"></i></a>
+
+		</div>
+
+	</div>
+	<div class="main_content">
+		<div class="header">Name: Charles John Canete<br>ID No: 01-32154<br>Role: Administrator
+			<button><b><a href="/logout">LOG-OUT</a></b></button>
+		</div>
+		<input type="text" name="" placeholder="Search here..." class="search">
+		<form>
+			<select name="Filter by" class="filter">
+				<option value="1">Filter</option>
+				<option value="2">Filter</option>
+				<option value="3">Filter</option>
+				<option value="4">Filter</option>
+			</select>
+		</form>
+		<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+		<div class="info">
+			
+				<p>CUSTOMER ID</p>
+				<p>LAST NAME</p>
+				<p>FIRST NAME</p>
+				<p>ADDRESS</p>
+			
+		</div>
+		<div class="info1">
+			
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00123403</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Owen</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Victor</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cebu City</p>
+		</div>
+		<div class="info2">
+			
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00321406</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Torres</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Erica</p>
+				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Naga City</p>
+		</div>
+		</div>
+
+	</div>
+
+</body>
+</html>

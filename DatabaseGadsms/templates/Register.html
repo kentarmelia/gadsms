@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" type="x-icon" href="{{ url_for('static', filename='images/gadsms_logo.png') }}">
+	<title>GadSMS: Gadget Shop Management Shop</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/Register.css') }}">
+</head>
+<body>
+	<img src="{{ url_for('static', filename='images/gadsms.jpg') }}" class="intro">
+	<form action="/addcustomer" method="POST">
+		<div class="regbox">
+			<h1>Register Here</h1>
+		
+				<p>Lastname</p>
+				<input type="text" name="lastname" placeholder="Last Name" required>
+				<p>Firstname</p>
+				<input type="text" name="firstname" placeholder="First Name" required>
+				<p>Email</p>
+				<input type="text" name="email" placeholder="Email" required>
+				<p>Contact No.</p>
+				<input type="text" name="contact" placeholder="Contact No." required>
+				<p>Username</p>
+				<input type="text" name="username" placeholder="Enter Username" required>
+			
+			<input type="submit" name="submit" value="Register">
+			<a href="{{ url_for('login')}}">Login</a><br>
+		
+
+		</div>
+		<div class="passbox">
+			<p class="pass">Password</p>
+			<input type="password" name="password" placeholder="Enter Password" required>
+			<p>Confirm Password</p>
+			<input type="password" name="password2" placeholder="Confirm Password" required>
+		</div>
+	</form>
+
+</body>
+</html>

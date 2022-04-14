@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" type="x-icon" href="{{ url_for('static', filename='images/gadsms_logo.png') }}">
+	<title>GadSMS: Gadget Shop Management Shop</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/AdminHP.css') }}">
+	<script src="https://kit.fontawesome.com/05f5e3eb98.js" crossorigin="anonymous"></script>
+	<script src="script.js"></script>
+</head>
+<body>
+	
+	<div id="clock"></div>
+	<div class="wrapper">
+		<div class="sidebar">
+			<img src="{{ url_for('static', filename='images/gadsms_logo.png') }}">
+		<ul>
+			<li><a href="{{ url_for('adminhp')}}">Home</a></li>
+			<li><a href="{{ url_for('adminin')}}">Inventory</a></li>
+			<li><a href="{{ url_for('adminvs')}}">View Sales</a></li>
+			<li><a href="{{ url_for('adminap')}}">Appointment</a></li>
+			<li><a href="{{ url_for('adminem')}}">Employees</a></li>
+			<li><a href="{{ url_for('adminvc')}}">View Customer</a></li>
+			<li><a href="{{ url_for('admindi')}}">Defect Items</a></li>
+		</ul>
+		<div class="social_media">
+			<a href="#"><i class="fa-brands fa-facebook"></i></a>
+			<a href="#"><i class="fa-brands fa-google"></i></a>
+			<a href="#"><i class="fa-brands fa-twitter"></i></a>
+
+		</div>
+
+	</div>
+	<div class="main_content">
+		<div class="header">
+			Name: Charles John Canete<br>
+			ID No: 01-32154<br>
+			Role: Administrator
+			<button><b><a href="/logout">LOG-OUT</a></b></button>
+		</div>
+		
+		<div class="overview">
+			<div>Overview</div>
+		</div>
+		<div class="monthly">
+			<div>Monthly Sales</div>
+		</div>
+		</div>
+
+	</div>
+
+</body>
+</html>

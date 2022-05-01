@@ -1,9 +1,10 @@
 from flask import Flask,render_template,request,redirect,url_for,session
-from database import ValidateUser,Validaterole,Validatecustomer,SAVE_DB,getcustomer,getcustomerid
-
+from database import ValidateUser,Validaterole,Validatecustomer,SAVE_DB,getcustomer,getstaff,get_products,addproducts,read_userName
+from datetime import datetime 
 app = Flask(__name__)
-app.secret_key = "3asdrsdgf"
-idnum = ""
+app.secret_key = "sd455rsdgf"
+now = datetime.now()
+uname = ""
 #---------------------------------------------LOGIN & REGISTER PAGE---------------------------------------------------------
 @app.route("/")
 def home():
@@ -17,20 +18,26 @@ def index(message:str):
 def login():
     username:str = request.form["username"]
     password:str = request.form["password"]
-
-    if ValidateUser(username,password):
-        session['username'] = username
-        role = Validaterole(username,password)
-        if role == "Admin": 
-            return redirect(url_for("adminhp"))
-        if role == "Seller":
-            return redirect(url_for("sellersi"))
-        if role == "Technician":
-            return redirect(url_for("technicianap"))
-    elif Validatecustomer(username,password):
-        return render_template("CustomerAP.html",message=username)
+    if request.method == "POST":
+        if ValidateUser(username,password):
+            session["username"] = username
+            role = Validaterole(username,password)
+            if role == "Admin":
+                username = session["username"]
+                return redirect(url_for("adminhp"))
+            if role == "Seller":
+                session["username"] = username
+                return redirect(url_for("sellersi"))
+            if role == "Technician":
+                username = session["username"]
+                return redirect(url_for("technicianap"))
+        elif Validatecustomer(username,password):
+            session["username"] = username
+            return redirect(url_for("customerap"))
+        else:
+            return redirect(url_for("login",message="LOGIN FAILED"))
     else:
-        return redirect(url_for("login",message="LOGIN FAILED"))
+        return redirect(url_for("login"))
 
 @app.route("/register")
 def register():
@@ -51,72 +58,177 @@ def addcustomer():
 #---------------------------------------------------- ADMIN PAGE-----------------------------------------------------------------
 @app.route("/adminap")
 def adminap():
-    return render_template("AdminAP.html")
+    if "username" in session:
+        username = session["username"]
+        slist = getstaff(username)
+        return render_template("AdminAP.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("adminap"))
+        return redirect(url_for("login"))
 
 @app.route("/admindi")
 def admindi():
-    return render_template("AdminDI.html")
+    if "username" in session:
+        username = session["username"]
+        slist = getstaff(username)
+        return render_template("AdminDI.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("admindi"))
+        return redirect(url_for("login"))
 
 @app.route("/adminem")
 def adminem():
-    return render_template("AdminEM.html")
+    if "username" in session:
+        username = session["username"]
+        slist = getstaff(username)
+        return render_template("AdminEM.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("adminem"))
+        return redirect(url_for("login"))
 
 @app.route("/adminhp")
 def adminhp():
-   return render_template("AdminHP.html")
+    if "username" in session:
+        username = session["username"]
+        slist = getstaff(username)
+        return render_template("AdminHP.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("adminhp"))
+        return redirect(url_for("login"))
   
-
 @app.route("/adminin")
 def adminin():
-    return render_template("AdminIN.html")
+    uname = request.args.get('uname', None)
+    if "username" in session:
+        username = session["username"]
+        hlist:list=['PRODUCT ID','PRODUCT TYPE NAME','PRODUCT NAME','PRODUCT DESC.','STOCK QTY','PRODUCT PRICE','DISCOUNT PRICE','ACTION']
+        plist = get_products()
+        slist = getstaff(username)
+        return render_template("AdminIN.html",slist = slist,pageheader = hlist,plist = plist,uname=uname)
+    else:
+        if "username" in session:
+            return redirect(url_for("adminin"))
+        return redirect(url_for("login"))
 
 @app.route("/adminvc")
 def adminvc():
-    return render_template("AdminVC.html")
+    if "username" in session:
+        username = session["username"]
+        slist = getstaff(username)
+        return render_template("AdminVC.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("adminvc"))
+        return redirect(url_for("login"))
 
 @app.route("/adminvs")
 def adminvs():
-    return render_template("AdminVS.html")
+    if "username" in session:
+        username = session["username"]
+        slist = getstaff(username)
+        return render_template("AdminVS.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("adminvs"))
+        return redirect(url_for("login"))
 
 #------------------------------------------------------CUSTOMER------------------------------------------------------------------
 
 @app.route("/customerap")
 def customerap():
-
-    return render_template("CustomerAP.html")
+    if "username" in session:
+        username = session["username"]
+        slist = getcustomer(username)
+        return render_template("CustomerAP.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("customerap"))
+        return redirect(url_for("login"))
 
 @app.route("/customerma")
 def customerma():
-
-    return render_template("CustomerMA.html")
+    if "username" in session:
+        username = session["username"]
+        slist = getcustomer(username)
+        return render_template("CustomerMA.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("customerma"))
+        return redirect(url_for("login"))
 
 #-------------------------------------------------------SELLER--------------------------------------------------------------------
 
 @app.route("/sellersi")
 def sellersi():
-    return render_template("SellerSI.html")
+    if "username" in session:
+        username = session["username"]
+        slist = getstaff(username)
+        return render_template("SellerSI.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("sellersi"))
+        return redirect(url_for("login"))
 
 @app.route("/sellervc")
 def sellervc():
-    return render_template("SellerVC.html")
+    if "username" in session:
+        username = session["username"]
+        slist = getstaff(username)
+        return render_template("SellerVC.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("sellervc"))
+        return redirect(url_for("login"))
 #------------------------------------------------------TECHNICIAN-----------------------------------------------------------------
 @app.route("/technicianap")
 def technicianap():
-    return render_template("TechnicianAP.html")
+    if "username" in session:
+        username = session["username"]
+        slist = getstaff(username)
+        return render_template("TechnicianAP.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("technicianap"))
+        return redirect(url_for("login"))
 
 @app.route("/technicianvc")
 def technicianvc():
-    return render_template("TechnicianVC.html")
-
+    if "username" in session:
+        username = session["username"]
+        slist = getstaff(username)
+        return render_template("TechnicianVC.html",slist = slist)
+    else:
+        if "username" in session:
+            return redirect(url_for("technicianvc"))
+        return redirect(url_for("login"))
+#----------------------------------------------Delete-------------------------------------------------------
+@app.route("/addproduct",methods=["POST"])
+def addproduct():
+    firstname = ""
+    if "username" in session:
+        username = session["username"]
+        uname = read_userName(username)
+        DATA:dict = {
+            "ptype":request.form['ptype'],
+            "pname":request.form['pname'],
+            "pprice":request.form['pprice'],
+            "qty":request.form['qty'],
+            "dprice":request.form['dprice']
+        }
+        dt_string = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        addproducts(DATA,uname,dt_string)
+        return redirect(url_for("adminin"))
+    else:
+        return redirect(url_for("login"))
 @app.route("/logout")
 def logout():
+    session.pop("username",None)
     return redirect(url_for("login",message="LOGOUT"))
 
-@app.after_request
-def after_request(response):
-    session.clear()
-    response.headers.add('Cache-Control', 'no-store,no-cache,must-revalide,post-check=0,pre-check=0')
-    return response
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",debug=True)

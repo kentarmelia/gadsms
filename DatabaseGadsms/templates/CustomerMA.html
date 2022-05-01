@@ -24,7 +24,18 @@
 
 	</div>
 	<div class="main_content">
-		<div class="header">Name: Christus Aldrich Damolo<br>ID No: 00123403
+		<div class="header">
+			{% for user in slist%}
+			{% for key,value in user.items() %}
+				{%if key == "firstname"%}
+					<p>Name: {{value}}
+				{%elif key == "lastname"%}
+					{{value}}</p>
+				{%else%}
+					<p>ID No. : {{value}}</p>	
+				{%endif%}
+			{% endfor %} 
+			{% endfor%}
 			<button><b><a href="/logout">LOG-OUT</a></b></button>
 		</div>
 		<input type="button" name="" value="Save Changes" class="save">

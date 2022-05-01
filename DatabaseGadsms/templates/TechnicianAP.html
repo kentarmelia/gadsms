@@ -24,7 +24,20 @@
 
 	</div>
 	<div class="main_content">
-		<div class="header">Name: Kent Armelia<br>ID No: 01-42255<br>Role: Technician
+		<div class="header">
+			{% for user in slist%}
+			{% for key,value in user.items() %}
+				{%if key == "firstname"%}
+					<p>Name: {{value}}
+				{%elif key == "lastname"%}
+					{{value}}</p>
+				{%elif key == "user_id"%}
+					<p>ID No. : {{value}}</p>
+				{%else%}
+					<p>Role : {{value}}</p>
+				{%endif%}
+			{% endfor %} 
+			{% endfor%}
 			<button><b><a href="/logout">LOG-OUT</a></b></button>
 		</div>
 

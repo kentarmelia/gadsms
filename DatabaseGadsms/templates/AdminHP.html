@@ -32,9 +32,19 @@
 	</div>
 	<div class="main_content">
 		<div class="header">
-			Name: Charles John Canete<br>
-			ID No: 01-32154<br>
-			Role: Administrator
+			{% for user in slist%}
+			{% for key,value in user.items() %}
+				{%if key == "firstname"%}
+					<p>Name: {{value}}
+				{%elif key == "lastname"%}
+					{{value}}</p>
+				{%elif key == "user_id"%}
+					<p>ID No. : {{value}}</p>
+				{%else%}
+					<p>Role : {{value}}</p>
+				{%endif%}
+			{% endfor %} 
+			{% endfor%}
 			<button><b><a href="/logout">LOG-OUT</a></b></button>
 		</div>
 		

@@ -1,10 +1,9 @@
 from flask import Flask,render_template,request,redirect,url_for,session
-from database import ValidateUser,Validaterole,Validatecustomer,SAVE_DB,getcustomer,getstaff,get_products,addproducts,read_userName
+from database import ValidateUser,Validaterole,Validatecustomer,SAVE_DB,getcustomer,getstaff,get_products,addproducts,read_userName,DELETEDATA,updateproducts,get_defects,getviewcustomer,getallemployee
 from datetime import datetime 
 app = Flask(__name__)
 app.secret_key = "sd455rsdgf"
 now = datetime.now()
-uname = ""
 #---------------------------------------------LOGIN & REGISTER PAGE---------------------------------------------------------
 @app.route("/")
 def home():
@@ -49,6 +48,7 @@ def addcustomer():
         "lastname":request.form['lastname'],
         "firstname":request.form['firstname'],
         "email":request.form['email'],
+        "address":request.form['address'],
         "contact":request.form['contact'],
         "username":request.form['username'],
         "password":request.form['password']
@@ -72,7 +72,9 @@ def admindi():
     if "username" in session:
         username = session["username"]
         slist = getstaff(username)
-        return render_template("AdminDI.html",slist = slist)
+        plist = get_defects()
+        hlist:list=['DEFECT PRODUCT ID','SALE DETAIL ID','PRODUCT ID','PRODUCT NAME','QTY','PRODUCT PRICE','ACTION']
+        return render_template("AdminDI.html",slist = slist,pageheader = hlist,plist=plist)
     else:
         if "username" in session:
             return redirect(url_for("admindi"))
@@ -83,7 +85,9 @@ def adminem():
     if "username" in session:
         username = session["username"]
         slist = getstaff(username)
-        return render_template("AdminEM.html",slist = slist)
+        plist = getallemployee()
+        hlist:list=['ID','ROLE','FIRSTNAME','LASTNAME','ADDRESS']
+        return render_template("AdminEM.html",slist = slist,pageheader=hlist,plist=plist)
     else:
         if "username" in session:
             return redirect(url_for("adminem"))
@@ -118,8 +122,10 @@ def adminin():
 def adminvc():
     if "username" in session:
         username = session["username"]
+        hlist:list=['Customer ID','LASTNAME','FIRSTNAME','ADDRESS']
         slist = getstaff(username)
-        return render_template("AdminVC.html",slist = slist)
+        plist = getviewcustomer()
+        return render_template("AdminVC.html",slist = slist,pageheader = hlist,plist = plist)
     else:
         if "username" in session:
             return redirect(url_for("adminvc"))
@@ -205,10 +211,11 @@ def technicianvc():
         if "username" in session:
             return redirect(url_for("technicianvc"))
         return redirect(url_for("login"))
-#----------------------------------------------Delete-------------------------------------------------------
-@app.route("/addproduct",methods=["POST"])
+#----------------------------------------------ADD----DELETE----UPDATE--------------------------------------------------
+@app.route("/addproduct",methods=["POST","GET"])
 def addproduct():
     firstname = ""
+    message=""
     if "username" in session:
         username = session["username"]
         uname = read_userName(username)
@@ -219,11 +226,41 @@ def addproduct():
             "qty":request.form['qty'],
             "dprice":request.form['dprice']
         }
+        flag:int=int(request.form["flag"])
+        pid=request.form["id"]
+        ptype:int=int(request.form["ptype"])
+        pname:str=request.form["pname"]
+        pprice:float=float(request.form["pprice"])
+        dprice:float=float(request.form["dprice"])
+        qty:int=int(request.form["qty"])
         dt_string = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        addproducts(DATA,uname,dt_string)
-        return redirect(url_for("adminin"))
+        fields:list=['product_id','product_type_id','product_name','product_price','discount_price','stock_quantity','updated_by','updated_date']
+        data:list=[pid,ptype,pname,pprice,dprice,qty,uname,dt_string]
+        #addproducts(DATA,uname,dt_string)
+        if flag == 0:
+            okey:bool=addproducts(DATA,uname,dt_string)
+            if okey:
+                message = "Product Added"
+            else:
+                message = "Error adding Product"
+        if flag == 1:
+            okey:bool=updateproducts("inventory",pid,fields,data)
+            if okey:
+                message = "Product updated"
+            else:
+                message = "Error Updating Product"
+        return redirect(url_for("adminin",message=message))
     else:
         return redirect(url_for("login"))
+@app.route("/deleteproduct",methods=["GET"])
+def deleteproduct():
+    id:int=request.args.get("id")
+    okey:bool = DELETEDATA("inventory",id)
+    if okey:
+        return redirect(url_for("adminin",message="Product Removed"))
+    else:
+        return redirect(url_for("adminin",message="Error Removing Product"))
+#-------------------------------------------LOG-OUT---------------------------------------------------------------------
 @app.route("/logout")
 def logout():
     session.pop("username",None)

@@ -57,7 +57,18 @@ def SAVE_DB(data:dict):
     DATABASE.commit()
     cursor.close()
 
-def addproducts(data,flname,dt_string):
+def DELETEDATA(table:str,idno:int):
+	try:
+		sql:str = f"DELETE FROM `{table}` WHERE `product_id`={idno}"
+		cursor = DATABASE.cursor()
+		cursor.execute(sql)
+		DATABASE.commit()
+		cursor.close()
+	except Exception:
+		return False
+	return True
+
+def addproducts(data,flname,dt_string)->bool:
 	p_id = random.randint(10000,99999)
 	ptype:str = data.get("ptype")
 	pname:str = data.get("pname")
@@ -69,10 +80,41 @@ def addproducts(data,flname,dt_string):
 	cursor.execute(sql)
 	DATABASE.commit()
 	cursor.close()
+	okey=True
+	return okey
+
+def updateproducts(table:str,id:int,fields:list=[],new_data:list=[])->bool:
+	okey:bool=False
+	if len(fields)==len(new_data):
+		flds:str="`=%s, `".join(fields)
+		flds+="`=%s"
+		sql:str=f"UPDATE `{table}` SET `{flds} WHERE `product_id`={id}"
+		cursor = DATABASE.cursor()
+		cursor.execute(sql,new_data)
+		DATABASE.commit()
+		cursor.close()
+		okey=True
+	return okey
 
 
 def getcustomer(username)->list:
 	sql:str = f"SELECT `firstname`,`lastname`,`customer_id` FROM `customer` WHERE `username`='{username}'"
+	cursor = DATABASE.cursor(dictionary=True)
+	cursor.execute(sql)
+	slist:list = cursor.fetchall()
+	cursor.close()
+	return slist
+
+def getviewcustomer()->list:
+	sql:str = f"SELECT `customer_id`,`firstname`,`lastname`,`address` FROM `customer`" #"SELECT user.user_id, role.role_name, user.firstname, user.lastname,user.address FROM `user`, `role` WHERE role.role_id = user.role_id"
+	cursor = DATABASE.cursor(dictionary=True)
+	cursor.execute(sql)
+	slist:list = cursor.fetchall()
+	cursor.close()
+	return slist
+
+def getallemployee()->list:
+	sql:str = f"SELECT user.user_id, role.role_name, user.firstname, user.lastname,user.address FROM `user`, `role` WHERE role.role_id = user.role_id" #"SELECT user.user_id, role.role_name, user.firstname, user.lastname,user.address FROM `user`, `role` WHERE role.role_id = user.role_id"
 	cursor = DATABASE.cursor(dictionary=True)
 	cursor.execute(sql)
 	slist:list = cursor.fetchall()
@@ -89,6 +131,14 @@ def getstaff(username)->list:
 
 def get_products()->list:
 	sql:str = f"select inventory.product_id, product_type_name, product_name, product_type_desc, stock_quantity, product_price, discount_price from product_type, inventory where product_type.product_type_id = inventory.product_type_id"
+	cursor = DATABASE.cursor(dictionary=True)
+	cursor.execute(sql)
+	elist:list = cursor.fetchall()
+	cursor.close()
+	return elist
+
+def get_defects()->list:
+	sql:str = f"select def.defect_prod_id as Defect_Product_ID, ps.prod_detail_id as Sale_Detail_ID, ps.product_type_id as Product_ID, def.product_name as Product_Name, ps.quantity as QTY, ps.sale_price as Product_Price from product_sale_detail ps, defect_prod_inventory def where ps.prod_detail_id = def.prod_detail_id"
 	cursor = DATABASE.cursor(dictionary=True)
 	cursor.execute(sql)
 	elist:list = cursor.fetchall()

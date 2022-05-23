@@ -11,72 +11,80 @@
 	<div class="wrapper">
 		<div class="sidebar">
 			<img src="{{ url_for('static', filename='images/gadsms_logo.png') }}">
-		<ul>
-			<li><a href="{{ url_for('adminhp')}}">Home</a></li>
-			<li><a href="{{ url_for('adminin')}}">Inventory</a></li>
-			<li><a href="{{ url_for('adminvs')}}">View Sales</a></li>
-			<li><a href="{{ url_for('adminap')}}">Appointment</a></li>
-			<li><a href="{{ url_for('adminem')}}">Employees</a></li>
-			<li><a href="{{ url_for('adminvc')}}">View Customer</a></li>
-			<li><a href="{{ url_for('admindi')}}">Defect Items</a></li>
-		</ul>
-		<div class="social_media">
-			<a href="#"><i class="fa-brands fa-facebook"></i></a>
-			<a href="#"><i class="fa-brands fa-google"></i></a>
-			<a href="#"><i class="fa-brands fa-twitter"></i></a>
+			<ul>
+				<li><a href="{{ url_for('adminhp')}}">Home</a></li>
+				<li><a href="{{ url_for('adminin')}}">Inventory</a></li>
+				<li><a href="{{ url_for('adminvs')}}">View Sales</a></li>
+				<li><a href="{{ url_for('adminap')}}">Appointment</a></li>
+				<li><a href="{{ url_for('adminem')}}">Employees</a></li>
+				<li><a href="{{ url_for('adminvc')}}">View Customer</a></li>
+				<li class="active"><a href="{{ url_for('admindi')}}">Defect Items</a></li>
+			</ul>
+			<div class="social_media">
+				<a href="#"><i class="fa-brands fa-facebook"></i></a>
+				<a href="#"><i class="fa-brands fa-google"></i></a>
+				<a href="#"><i class="fa-brands fa-twitter"></i></a>
 
+			</div>
 		</div>
-
-	</div>
-	<div class="main_content">
-		<div class="header">
-			{% for user in slist%}
-			{% for key,value in user.items() %}
-				{%if key == "firstname"%}
-					<p>Name: {{value}}
-				{%elif key == "lastname"%}
-					{{value}}</p>
-				{%elif key == "user_id"%}
-					<p>ID No. : {{value}}</p>
-				{%else%}
-					<p>Role : {{value}}</p>
-				{%endif%}
-			{% endfor %} 
-			{% endfor%}
-			<button><b><a href="/logout">LOG-OUT</a></b></button>
-		</div>
-		<input type="button" name="" value="Add Defect Item" class="additem" onclick="document.getElementById('adddefectmodal').style.display='block'">
-		<input type="text" name="" placeholder="Search here..." class="search">
-		<form>
-			<select name="Filter by" class="filter">
-				<option value="1">Filter</option>
-				<option value="2">Filter</option>
-				<option value="3">Filter</option>
-				<option value="4">Filter</option>
-			</select>
-		</form>
-		<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
-		<br>
-		<table class="w3-table-all w3--card-4 w3-text-black">
-			<tr>
-				{% for h in pageheader %}
-					<th>{{ h | upper }}</th>
-				{% endfor %}
-			</tr>
-			{% for item in plist %}
-			<tr>
-				{% for key,value in item.items() %}
-				<td>
-					{{ value | upper }}
-				</td>
-				{% endfor %}
-				<td>
-					<button onclick="edit_product('{{item['product_id']}}','{{item['product_type_id']}}','{{item['product_name']}}','{{item['product_price']}}','{{item['stock_quantity']}}','{{item['discount_price']}}')">&#9998;</button>
-					<button onclick="deleteproduct({{item['product_id']}})">&times;</button>				
-				</td>
-			</tr>
-			{% endfor %}
-		</table>
+		<div class="main_content">
+			<div class="header">
+				<div class="header-detail-side">
+						{% for user in slist%}
+						{% for key,value in user.items() %}
+							{%if key == "firstname"%}
+								<p>Name: {{value}}
+							{%elif key == "lastname"%}
+								{{value}}</p>
+							{%elif key == "user_id"%}
+								<p>ID No. : {{value}}</p>
+							{%else%}
+								<p>Role : {{value}}</p>
+							{%endif%}
+						{% endfor %} 
+						{% endfor%}	
+				</div>
+				<div class="logout-side">
+					<button class="logout-btn"><a href="/logout"><i class="fas fa-sign-out-alt"></i></a></button>
+				</div>
+			</div>
+			<br>
+			<br>
+			<div class="table-container">
+				<div class="top-table-container">
+					<input type="button" name="" value="Add Defect Item" class="additem" onclick="document.getElementById('adddefectmodal').style.display='block'">
+					<input type="text" name="" placeholder="Search here..." class="search">
+					<form>
+						<select name="Filter by" class="filter">
+							<option value="1">Filter</option>
+							<option value="2">Filter</option>
+							<option value="3">Filter</option>
+							<option value="4">Filter</option>
+						</select>
+					</form>
+					<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+				</div>
+				<table class="w3-table-all w3--card-4 w3-text-black">
+					<tr>
+						{% for h in pageheader %}
+							<th>{{ h | upper }}</th>
+						{% endfor %}
+					</tr>
+					{% for item in plist %}
+					<tr>
+						{% for key,value in item.items() %}
+						<td>
+							{{ value | upper }}
+						</td>
+						{% endfor %}
+						<td>
+							<button onclick="edit_product('{{item['defect_prod_id']}}','{{item['prod_detail_id']}}','{{item['defect_prod_desc']}}','{{item['product_name']}}','{{item['quantity']}}','{{item['product_price']}}','{{item['product_type_id']}}')">&#9998;</button>
+							<button onclick="deletedefproduct({{item['defect_prod_id']}})">&times;</button>				
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
 		</div>
 		<div class="w3-modal" id ="adddefectmodal"> 
 			<div class ="w3-modal-content w3-animate-zoom">
@@ -85,7 +93,7 @@
 					<button class="w3-button w3-display-topright" onclick="document.getElementById('adddefectmodal').style.display='none'">&times;</button>
 				</div>
 				<div class="w3-container">
-					<form action="/addproduct" method="post" name="defectform">
+					<form action="/adddefects" method="post" name="defectform">
 						<!--Saving Flag-->
 						<!--Flag: '-' add student--->
 						<!--Flag: '1++' update student--->
@@ -108,8 +116,13 @@
 						</p>
 						<br>
 						<p>
+							<label>Sale Detail ID: </label>
+							<input type="text" class="w3-border" name="sdi" id="sdi" required>
+						</p>
+						<br>
+						<p>
 							<label>Product Price: </label>
-							<input type="text" class="w3-border" name="pprice" id="pprice" required>
+							<input type="text" class="w3-border" name="dpprice" id="dpprice" required>
 						</p>
 						<br>
 						<p>
@@ -132,6 +145,33 @@
 			</div>
 		</div>
 	</div>
-
+	<script>
+		function deletedefproduct(id){
+			var ok=confirm("Delete this Product? =>"+id)
+			if(ok)
+				location.href="/deletedefproduct?id="+id
+ 
+		}
+		function edit_product(id,sdi,pdefect,pname,qty,dpprice,ptype){
+		
+		/*
+		document.forms['studentform']['flag'].value = id;
+		document.forms['studentform']['idno'].value = idno;
+		document.forms['studentform']['lastname'].value = lastname;
+		document.forms['studentform']['firstname'].value = firstname;
+		document.forms['studentform']['course'].value = course;
+		document.forms['studentform']['level'].value = level;
+		*/
+		document.getElementById('flag').value=1;
+		document.getElementById('id').value=id;
+		document.getElementById('ptype').value=ptype;
+		document.getElementById('pname').value=pname;
+		document.getElementById('sdi').value=sdi;
+		document.getElementById('dpprice').value=dpprice;
+		document.getElementById('qty').value=qty;
+		document.getElementById('pdefect').value=pdefect;
+		document.getElementById('adddefectmodal').style.display='block'
+	}
+	</script>
 </body>
 </html>

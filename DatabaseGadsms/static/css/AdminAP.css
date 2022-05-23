@@ -36,6 +36,10 @@ body{
 
 }
 
+.active {
+	border-left: 6px solid;
+}
+
 .wrapper .sidebar{
 	position: fixed;
 	width: 200px;
@@ -53,6 +57,10 @@ img{
 	height: 80px;
 	margin-bottom: 40px;
 	margin-top: 10px;
+}
+
+.table-container {
+	margin: 0 40px 0 245px;
 }
 
 .wrapper .sidebar ul li{
@@ -100,60 +108,76 @@ img{
 
 .wrapper .main_content{
 	width: 100%;
-	margin-left: 200px;
 }
 
 .wrapper .main_content .header{
-	padding: 20px;
+	display: flex;
+	width: 100%;
+	padding: 20px 50px 20px 245px;
 	background: #353658;
 	color: white;
 	border-bottom: 1px solid #e0e4e8;
 }
 
+.header-detail-side {
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+}
+
+.logout-side {
+	width: 10%;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.logout-btn {
+	border: none;
+	margin-left: auto;
+	width: 50px;
+}
+
+.top-table-container {
+	display: flex;
+	padding-bottom: 10px;
+}
+
+
 .bookitem{
+	margin-right: auto;
 	background: #594f8d;
 	color: #fff;
-	top: 65%;
-	left: 335px;
-	position: absolute;
-	transform: translate(-50%,-50%);
-	box-sizing: border-box;
 	padding: 5px 30px;
 }
 
 .bookitem:hover{
 	cursor: pointer;
-	color: #594f8d;
+	color: white;
 	background: #2e2e2c;
 }
 
 .search{
-	top: 60%;
-	right: 507px;
-	position: absolute;
+	margin-right: 5px;
 	padding: 5px 20px;
 }
 
 .filter{
-	top: 60%;
-	right: 405px;
-	position: absolute;
-	padding: 5px 20px;
+	margin-right: 6px;
+	padding: 11px 20px;
 }
 
 .fa-solid{
-	top: 60%;
-	right: 350px;
-	position: absolute;
-	padding: 5px 15px;
+	padding: 13px 15px;
 	border: 1px solid black;
 	background: #594f8d;
 	color: white;
 	border-radius: 2px;
 }
 
+
 .fa-solid:hover{
-	color: #594f8d;
+	color: white;
 	background: #2e2e2c;
 }
 

@@ -14,7 +14,7 @@
 			<img src="{{ url_for('static', filename='images/gadsms_logo.png') }}">
 		<ul>
 			<li><a href="{{ url_for('adminhp')}}">Home</a></li>
-			<li class="active"><a href="{{ url_for('adminin')}}">Inventory</a></li>
+			<li><a href="{{ url_for('adminin')}}">Inventory</a></li>
 			<li><a href="{{ url_for('adminvs')}}">View Sales</a></li>
 			<li><a href="{{ url_for('adminap')}}">Appointment</a></li>
 			<li><a href="{{ url_for('adminem')}}">Employees</a></li>
@@ -28,67 +28,65 @@
 
 		</div>
 	</div>
-	
+	<p>
+	<input type="button" name="" value="Add Item" class="additem" onclick="document.getElementById('addproductmodal').style.display='block'">
+		<input type="text" name="" placeholder="Search here..." class="search">
+		<form>
+			<select name="Filter by" class="filter">
+				<option value="1">Filter</option>
+				<option value="2">Filter</option>
+				<option value="3">Filter</option>
+				<option value="4">Filter</option>
+			</select>
+		</form>
+		<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+	</p>
 	<div class="main_content">
-		<div class="header">
-			<div class="header-detail-side">
-					{% for user in slist%}
-					{% for key,value in user.items() %}
-						{%if key == "firstname"%}
-							<p>Name: {{value}}
-						{%elif key == "lastname"%}
-							{{value}}</p>
-						{%elif key == "user_id"%}
-							<p>ID No. : {{value}}</p>
-						{%else%}
-							<p>Role : {{value}}</p>
-						{%endif%}
-					{% endfor %} 
-					{% endfor%}	
-			</div>
-			<div class="logout-side">
-				<button class="logout-btn"><a href="/logout"><i class="fas fa-sign-out-alt"></i></a></button>
-			</div>
+	<div class="logout">
+		<button><b><a href="/logout">LOG-OUT</a></b></button>
 		</div>
+		<div class="header">
+			{% for user in slist%}
+			{% for key,value in user.items() %}
+				{%if key == "firstname"%}
+					<p>Name: {{value}}
+				{%elif key == "lastname"%}
+					{{value}}</p>
+				{%elif key == "user_id"%}
+					<p>ID No. : {{value}}</p>
+				{%else%}
+					<p>Role : {{value}}</p>
+				{%endif%}
+			{% endfor %} 
+			{% endfor%}
+			
+		</div>
+		
+		
 		<br>
 		<!--messaging panel NOT FIX-->
 		
 		<br>
-		<div class="table-container">
-			<div class="top-table-container">
-				<input type="button" name="" value="Add Item" class="additem" onclick="document.getElementById('addproductmodal').style.display='block'">
-				<input type="text" name="" placeholder="Search here..." class="search">
-				<form>
-					<select name="Filter by" class="filter">
-						<option value="1">Filter</option>
-						<option value="2">Filter</option>
-						<option value="3">Filter</option>
-						<option value="4">Filter</option>
-					</select>
-				</form>
-				<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
-			</div>
-			<table class="w3-table-all w3--card-4 w3-text-black">
-				<tr>
-					{% for h in pageheader %}
-						<th>{{ h | upper }}</th>
-					{% endfor %}
-				</tr>
-				{% for item in plist %}
-				<tr>
-					{% for key,value in item.items() %}
-					<td>
-						{{ value | upper }}
-					</td>
-					{% endfor %}
-					<td>
-						<button onclick="edit_product('{{item['product_id']}}','{{item['product_type_id']}}','{{item['product_name']}}','{{item['product_price']}}','{{item['stock_quantity']}}','{{item['discount_price']}}')">&#9998;</button>
-						<button onclick="deleteproduct({{item['product_id']}})">&times;</button>				
-					</td>
-				</tr>
+		<table class="w3-table-all w3--card-4 w3-text-black">
+			<tr>
+				{% for h in pageheader %}
+					<th>{{ h | upper }}</th>
 				{% endfor %}
-			</table>
-		</div>
+			</tr>
+			{% for item in plist %}
+			<tr>
+				{% for key,value in item.items() %}
+				<td>
+					{{ value | upper }}
+				</td>
+				{% endfor %}
+				<td>
+					<button onclick="edit_product('{{item['product_id']}}','{{item['product_type_id']}}','{{item['product_name']}}','{{item['product_price']}}','{{item['stock_quantity']}}','{{item['discount_price']}}')">&#9998;</button>
+					<button onclick="deleteproduct({{item['product_id']}})">&times;</button>				
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
 	</div>
 	<div class="w3-modal" id ="addproductmodal"> 
 		<div class ="w3-modal-content w3-animate-zoom">

@@ -4,6 +4,7 @@
 	<link rel="shortcut icon" type="x-icon" href="{{ url_for('static', filename='images/gadsms_logo.png') }}">
 	<title>GadSMS: Gadget Shop Management Shop</title>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/AdminAP.css') }}">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<script src="https://kit.fontawesome.com/05f5e3eb98.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -14,7 +15,7 @@
 			<li><a href="{{ url_for('adminhp')}}">Home</a></li>
 			<li><a href="{{ url_for('adminin')}}">Inventory</a></li>
 			<li><a href="{{ url_for('adminvs')}}">View Sales</a></li>
-			<li><a href="{{ url_for('adminap')}}">Appointment</a></li>
+			<li class="active"><a href="{{ url_for('adminap')}}">Appointment</a></li>
 			<li><a href="{{ url_for('adminem')}}">Employees</a></li>
 			<li><a href="{{ url_for('adminvc')}}">View Customer</a></li>
 			<li><a href="{{ url_for('admindi')}}">Defect Items</a></li>
@@ -29,57 +30,58 @@
 	</div>
 	<div class="main_content">
 		<div class="header">
-			{% for user in slist%}
-			{% for key,value in user.items() %}
-				{%if key == "firstname"%}
-					<p>Name: {{value}}
-				{%elif key == "lastname"%}
-					{{value}}</p>
-				{%elif key == "user_id"%}
-					<p>ID No. : {{value}}</p>
-				{%else%}
-					<p>Role : {{value}}</p>
-				{%endif%}
-			{% endfor %} 
-			{% endfor%}
-			<button><b><a href="/logout">LOG-OUT</a></b></button>
+			<div class="header-detail-side">
+					{% for user in slist%}
+					{% for key,value in user.items() %}
+						{%if key == "firstname"%}
+							<p>Name: {{value}}
+						{%elif key == "lastname"%}
+							{{value}}</p>
+						{%elif key == "user_id"%}
+							<p>ID No. : {{value}}</p>
+						{%else%}
+							<p>Role : {{value}}</p>
+						{%endif%}
+					{% endfor %} 
+					{% endfor%}	
+			</div>
+			<div class="logout-side">
+				<button class="logout-btn"><a href="/logout"><i class="fas fa-sign-out-alt"></i></a></button>
+			</div>
 		</div>
-		<input type="button" name="" value="Book Appointment" class="bookitem">
-		<input type="text" name="" placeholder="Search here..." class="search">
-		<form>
-			<select name="Filter by" class="filter">
-				<option value="1">Filter</option>
-				<option value="2">Filter</option>
-				<option value="3">Filter</option>
-				<option value="4">Filter</option>
-			</select>
-		</form>
-		<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
-		<div class="info">
-			
-				<p>APPOINMENT ID</p>
-				<p>CUSTOMER ID</p>
-				<p>AGENDA</p>
-				<p>START DATE</p>
-			
-		</div>
-		<div class="info1">
-			
-				<p>00765433</p>
-				<p>00123403</p>
-				<p>Gadget Repair</p>
-				<p>11/26/21</p>
-		</div>
-		<div class="info2">
-			
-				<p>00765435</p>
-				<p>00321406</p>
-				<p>Gadget Repair</p>
-				<p>11/26/21</p>
-		</div>
-		</div>
-
+		<br>
+		<br>
+		<div class="table-container">
+			<div class="top-table-container">
+				<input type="button" name="" value="View ...." class="bookitem" onclick="document.getElementById('').style.display='block'">
+				<input type="text" name="" placeholder="Search here..." class="search">
+				<form>
+					<select name="Filter by" class="filter">
+						<option value="1">Filter</option>
+						<option value="2">Filter</option>
+						<option value="3">Filter</option>
+						<option value="4">Filter</option>
+					</select>
+				</form>
+				<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+			</div>
+			<table class="w3-table-all w3--card-4 w3-text-black">
+				<tr>
+					{% for h in pageheader %}
+						<th>{{ h | upper }}</th>
+					{% endfor %}
+				</tr>
+				{% for item in plist %}
+				<tr>
+					{% for key,value in item.items() %}
+					<td>
+						{{ value | upper }}
+					</td>
+					{% endfor %}
+				</tr>
+				{% endfor %}
+			</table>
+		</div>	
 	</div>
-
 </body>
 </html>

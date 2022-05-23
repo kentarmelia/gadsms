@@ -4,6 +4,7 @@
 	<link rel="shortcut icon" type="x-icon" href="{{ url_for('static', filename='images/gadsms_logo.png') }}">
 	<title>GadSMS: Gadget Shop Management Shop</title>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/CustomerAP.css') }}">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<script src="https://kit.fontawesome.com/05f5e3eb98.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -38,7 +39,7 @@
 			{% endfor%}
 			<button><b><a href="/logout">LOG-OUT</a></b></button>
 		</div>
-		<input type="button" name="" value="Book" class="bookitem">
+		<input input type="button" name="" value="BOOK" class="addappointment" onclick="document.getElementById('addappointment').style.display='block'">
 		<input type="text" name="" placeholder="Search here..." class="search">
 		<form>
 			<select name="Filter by" class="filter">
@@ -50,31 +51,98 @@
 		</form>
 		<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
 		<br><br>
-		<div class="info">
-			
-				<p>APPOINTMENT ID</p>
-				<p>AGENDA</p>
-				<p>START DATE</p>
-				<p>END DATE</p>
-			
-		</div>
-		<div class="info1">
-			
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00765433</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gadget Repair</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/26/21</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/26/21</p>
-		</div>
-		<div class="info2">
-			
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00765435</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gadget Repair</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/26/11</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/26/21</p>
-		</div>
-		</div>
-
+		<br>
+		<table class="w3-table-all w3--card-4 w3-text-black">
+			<tr>
+				{% for h in pageheader %}
+					<th>{{ h | upper }}</th>
+				{% endfor %}
+			</tr>
+			{% for item in plist %}
+			<tr>
+				{% for key,value in item.items() %}
+				<td>
+					{{ value | upper }}
+				</td>
+				{% endfor %}
+				<td>
+					<button onclick="edit_appoint('{{item['appointment_id']}}','{{item['service_id']}}','{{item['start_date']}}','{{item['end_date']}}','{{item['device_name']}}')">&#9998;</button>
+					<button onclick="deleteappointment({{item['appointment_id']}})">&times;</button>				
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
 	</div>
+	<div class="w3-modal" id ="addappointment"> 
+		<div class ="w3-modal-content w3-animate-zoom">
+			<div class = "w3-container w3-blue">
+				<h3>Appointment Information</h3>
+				<button class="w3-button w3-display-topright" onclick="document.getElementById('addappointment').style.display='none'">&times;</button>
+			</div>
+			<div class="w3-container">
+				<form action="/addappointment" method="post" name="appointmentform">
+					<!--Saving Flag-->
+					<!--Flag: '-' add student--->
+					<!--Flag: '1++' update student--->
+					<input type="hidden" name="flag" id="flag" value="0">
+					<input type="hidden" name="id" id="id">
+					<br><br>
+					<p>
+						<label>Product Type:</label>
+						<select class="w3-select w3-border" style="width:23%" name="sid" id="sid" required>
+							<option value="956374">Repair</option>
+							<option value="941563">Check-up</option>
+						</select>
+					</p>
+					<br>
+					<p>
+						<label>Device Name: </label>
+						<input type="text" class="w3-border" name="dname" id="dname" required>
+					</p>
+					<br>
+					<p>
+						<label>Start Date: </label>
+						<input type="date" class="w3-border" name="sdate" id="sdate" required>
 
+						<label>End Date: </label>
+						<input type="date" class="w3-border" name="edate" id="edate" required>
+					</p>
+					<br>
+					<b><p>
+						<input class="w3-button w3-text-blue w3-border w3-border-blue " type="submit" value="SAVE">
+					</p></b>
+					<br> 
+					
+				</form>
+			</div>
+		</div>
+	</div>
+	<script>
+		function deleteappointment(id){
+			var ok=confirm("Delete this Appointment? =>"+id)
+			if(ok)
+				location.href="/deleteappointment?id="+id
+ 
+		}
+		function edit_appoint(id,sid,sdate,edate,dname){
+		
+		/*
+		document.forms['studentform']['flag'].value = id;
+		document.forms['studentform']['idno'].value = idno;
+		document.forms['studentform']['lastname'].value = lastname;
+		document.forms['studentform']['firstname'].value = firstname;
+		document.forms['studentform']['course'].value = course;
+		document.forms['studentform']['level'].value = level;
+		*/
+		document.getElementById('flag').value=1;
+		document.getElementById('id').value=id;
+		document.getElementById('sid').value=sid;
+		document.getElementById('sdate').value=sdate;
+		document.getElementById('edate').value=edate;
+		document.getElementById('dname').value=dname;
+		document.getElementById('addappointment').style.display='block'
+		
+	}
+	</script>
 </body>
 {% endblock %}

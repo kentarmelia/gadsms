@@ -1,5 +1,5 @@
 from flask import Flask,render_template,request,redirect,url_for,session
-from database import ValidateUser,Validaterole,Validatecustomer,SAVE_DB,getcustomer,getstaff,get_products,addproducts,read_userName,DELETEDATA,updateproducts,get_defects,getviewcustomer,getallemployee
+from database import ValidateUser,Validaterole,Validatecustomer,SAVE_DB,getcustomer,getstaff,get_products,addproducts,read_userName,DELETEDATA,updateproducts,get_defects,getviewcustomer,getallemployee,validateproddetail,adddefect,DELETEdefect,updatedefects,get_custapp,read_cusid,addapp,DELETEappoint,updateappointment,getallcustapp,getallcustapp2
 from datetime import datetime 
 app = Flask(__name__)
 app.secret_key = "sd455rsdgf"
@@ -60,8 +60,10 @@ def addcustomer():
 def adminap():
     if "username" in session:
         username = session["username"]
+        hlist:list=['Appointment ID','customer id','customer firstname','customer lastname','Service ID','Service Type Name','Device name','Start Date','end date','Status','Technician']
         slist = getstaff(username)
-        return render_template("AdminAP.html",slist = slist)
+        plist = getallcustapp()
+        return render_template("AdminAP.html",slist = slist,pageheader = hlist,plist = plist)
     else:
         if "username" in session:
             return redirect(url_for("adminap"))
@@ -73,7 +75,7 @@ def admindi():
         username = session["username"]
         slist = getstaff(username)
         plist = get_defects()
-        hlist:list=['DEFECT PRODUCT ID','SALE DETAIL ID','PRODUCT ID','PRODUCT NAME','QTY','PRODUCT PRICE','ACTION']
+        hlist:list=['DEFECT PRODUCT ID','SALE DETAIL ID','PRODUCT ID','PRODUCT NAME','DEFECT PRODUCT DESC.','QTY','PRODUCT PRICE','ACTION']
         return render_template("AdminDI.html",slist = slist,pageheader = hlist,plist=plist)
     else:
         if "username" in session:
@@ -148,8 +150,10 @@ def adminvs():
 def customerap():
     if "username" in session:
         username = session["username"]
+        hlist:list=['Appointment ID','Service ID','Service Type Name','Device name','Start Date','end date','Status','Technician','action']
         slist = getcustomer(username)
-        return render_template("CustomerAP.html",slist = slist)
+        plist = get_custapp(username)
+        return render_template("CustomerAP.html",slist = slist,pageheader = hlist,plist = plist)
     else:
         if "username" in session:
             return redirect(url_for("customerap"))
@@ -183,8 +187,10 @@ def sellersi():
 def sellervc():
     if "username" in session:
         username = session["username"]
+        hlist:list=['Customer ID','LASTNAME','FIRSTNAME','ADDRESS']
         slist = getstaff(username)
-        return render_template("SellerVC.html",slist = slist)
+        plist = getviewcustomer()
+        return render_template("SellerVC.html",slist = slist,pageheader = hlist,plist = plist)
     else:
         if "username" in session:
             return redirect(url_for("sellervc"))
@@ -194,8 +200,10 @@ def sellervc():
 def technicianap():
     if "username" in session:
         username = session["username"]
+        hlist:list=['Appointment ID','customer id','customer firstname','customer lastname','Service ID','Service Type Name','Device name','Start Date','end date','Status','action']
         slist = getstaff(username)
-        return render_template("TechnicianAP.html",slist = slist)
+        plist = getallcustapp2()
+        return render_template("TechnicianAP.html",slist = slist,pageheader = hlist,plist = plist)
     else:
         if "username" in session:
             return redirect(url_for("technicianap"))
@@ -205,8 +213,10 @@ def technicianap():
 def technicianvc():
     if "username" in session:
         username = session["username"]
+        hlist:list=['Customer ID','LASTNAME','FIRSTNAME','ADDRESS']
         slist = getstaff(username)
-        return render_template("TechnicianVC.html",slist = slist)
+        plist = getviewcustomer()
+        return render_template("TechnicianVC.html",slist = slist,pageheader = hlist,plist = plist)
     else:
         if "username" in session:
             return redirect(url_for("technicianvc"))
@@ -244,7 +254,7 @@ def addproduct():
             else:
                 message = "Error adding Product"
         if flag == 1:
-            okey:bool=updateproducts("inventory",pid,fields,data)
+            okey:bool=updateproducts("inventory",pid,fields,data,"product_id")
             if okey:
                 message = "Product updated"
             else:
@@ -260,6 +270,130 @@ def deleteproduct():
         return redirect(url_for("adminin",message="Product Removed"))
     else:
         return redirect(url_for("adminin",message="Error Removing Product"))
+
+@app.route("/deletedefproduct",methods=["GET"])
+def deletedefproduct():
+    id:int=request.args.get("id")
+    okey:bool = DELETEappoint("appointment",id)
+    if okey:
+        return redirect(url_for("admindi",message="Product Removed"))
+    else:
+        return redirect(url_for("admindi",message="Error Removing Product"))
+
+@app.route("/deleteappointment",methods=["GET"])
+def deleteappointment():
+    id:int=request.args.get("id")
+    okey:bool = DELETEappoint("appointment",id)
+    if okey:
+        return redirect(url_for("customerap",message="Appointment Removed"))
+    else:
+        return redirect(url_for("customerap",message="Error Removing Appointment"))
+
+@app.route("/doneappointment",methods=["GET"])
+def doneappointment():
+    if "username" in session:
+        id:int=request.args.get("id")
+        dt_string = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        username = session["username"]
+        dname:str = read_userName(username)
+        fields:list=['updated_date','updated_by','status']
+        data:list=[dt_string,dname,"Done"]
+        okey:bool=updateappointment("appointment",id,fields,data)
+        if okey:
+            return redirect(url_for("technicianap",message="Appointment Removed"))
+        else:
+            return redirect(url_for("technicianap",message="Error Removing Appointment"))
+    else:
+        return redirect(url_for("login"))
+@app.route("/adddefects",methods=["POST","GET"])
+def adddefects():
+    firstname = ""
+    message=""
+    if "username" in session:
+        username = session["username"]
+        uname = read_userName(username)
+        sdi:int=int(request.form["sdi"])
+        ver_sdi:bool = validateproddetail(sdi)
+        DATA:dict = {}
+        if ver_sdi:
+            DATA = {
+                "ptype":request.form['ptype'],
+                "pname":request.form['pname'],
+                "sdi":request.form['sdi'],
+                "qty":request.form['qty'],
+                "dpprice":request.form['dpprice'],
+                "pdefect":request.form['pdefect']
+            }
+        else:
+            return redirect(url_for("admindi",message="No product detail id is existed"))
+        flag:int=int(request.form["flag"])
+        pid=request.form["id"]
+        ptype:int=int(request.form["ptype"])
+        pname:str=request.form["pname"]
+        dpprice:float=float(request.form["dpprice"])
+        qty:int=int(request.form["qty"])
+        sdi:int=int(request.form["sdi"])
+        pdefect:str=str(request.form["pdefect"])
+        fields:list=['defect_prod_id','prod_detail_id','defect_prod_desc','product_name','quantity','product_price','product_type_id']
+        data:list=[pid,sdi,pdefect,pname,qty,dpprice,ptype]
+        #addproducts(DATA,uname,dt_string)
+        if flag == 0:
+            okey:bool=adddefect(DATA)
+            if okey:
+                message = "Defect Product Added"
+            else:
+                message = "Error adding Product"
+        if flag == 1:
+            okey:bool=updatedefects("defect_prod_inventory",pid,fields,data)
+            if okey:
+                message = "Defect Product updated"
+            else:
+                message = "Error Updating Defect Product"
+        return redirect(url_for("admindi",message=message))
+    else:
+        return redirect(url_for("login"))
+
+@app.route("/addappointment",methods=["POST","GET"])
+def addappointment():
+    firstname = ""
+    message=""
+    if "username" in session:
+        username = session["username"]
+        cusid:dict = read_cusid(username)
+        customerid = cusid['customer_id']
+        DATA:dict = {
+            "sid":request.form['sid'],
+            "dname":request.form['dname'],
+            "sdate":request.form['sdate'],
+            "edate":request.form['edate']
+        }
+        
+        flag:int=int(request.form["flag"])
+        dt_string = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        aid=request.form["id"]
+        sid:int=int(request.form["sid"])
+        sdate:date=request.form["sdate"]
+        edate:date=request.form["edate"]
+        dname:str=str(request.form["dname"])
+        fields:list=['service_id','start_date','end_date','updated_date','device_name']
+        data:list=[sid,sdate,edate,dt_string,dname]
+        #addproducts(DATA,uname,dt_string)
+        if flag == 0:
+            okey:bool=addapp(DATA,customerid,dt_string)
+            if okey:
+                message = "Defect Product Added"
+            else:
+                message = "Error adding Product"
+        if flag == 1:
+            okey:bool=updateappointment("appointment",aid,fields,data)
+            if okey:
+                message = "Appointment updated"
+            else:
+                message = "Error Updating Appointment"
+        return redirect(url_for("customerap",message=message))
+    else:
+        return redirect(url_for("login"))
+   
 #-------------------------------------------LOG-OUT---------------------------------------------------------------------
 @app.route("/logout")
 def logout():

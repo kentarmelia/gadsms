@@ -4,6 +4,7 @@
 	<link rel="shortcut icon" type="x-icon" href="{{ url_for('static', filename='images/gadsms_logo.png') }}">
 	<title>GadSMS: Gadget Shop Management Shop</title>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/TechnicianAP.css') }}">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<script src="https://kit.fontawesome.com/05f5e3eb98.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -51,31 +52,44 @@
 			</select>
 		</form>
 		<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
-		<div class="info">
-			
-				<p>APPOINMENT ID</p>
-				<p>CUSTOMER ID</p>
-				<p>AGENDA</p>
-				<p>START DATE</p>
-			
-		</div>
-		<div class="info1">
-			
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00765433</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00123403</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gadget Repair</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/26/21</p>
-		</div>
-		<div class="info2">
-			
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00765435</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00321406</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Gadget Repair</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11/26/21</p>
-		</div>
-		</div>
+		<br>
+		<table class="w3-table-all w3--card-4 w3-text-black">
+			<tr>
+				{% for h in pageheader %}
+					<th>{{ h | upper }}</th>
+				{% endfor %}
+			</tr>
+			{% for item in plist |sort(attribute='status', reverse = True)%}
+			<tr>
+				{% for key,value in item.items() %}
+				<td>
+					{{ value | upper }}
+				</td>
+				{% endfor %}
+				{% for key,value in item.items() %}
+				{% if value == "pending"%}
+				<td>
+					<button onclick="doneappointment('{{item['appointment_id']}}')">&#10003;</button>				
+				</td>
+				{%endif%}
+				{% if value == "Done"%}
+				<td>
+					<button disabled>&#10134;</button>				
+				</td>
+				{%endif%}
 
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</table>
 	</div>
-
+	<script>
+		function doneappointment(id){
+			var ok=confirm("Finish this Appointment? =>"+id)
+			if(ok)
+				location.href="/doneappointment?id="+id
+ 
+		}
+	</script>
 </body>
 </html>

@@ -34,6 +34,14 @@ def Validaterole(username:str,password:str)->str:
     cursor.close()
     return role
 
+def validateproddetail(sdi:int)->bool:
+	sql:str = f"SELECT * FROM `product_sale_detail` WHERE `prod_detail_id`='{sdi}'"
+	cursor = DATABASE.cursor()
+	cursor.execute(sql)
+	slist:list = cursor.fetchall()
+	cursor.close()
+	return len(slist)>0
+
 def read_userName(username)->str:
     sql:str=f"SELECT lastname, firstname FROM `user` WHERE username ='{username}'"
     conn=DATABASE.cursor(dictionary=True)
@@ -41,6 +49,13 @@ def read_userName(username)->str:
     slist:list=conn.fetchall()
     res = " ".join([ x['firstname'] for x in slist ] + [ x['lastname'] for x in slist ])
     return res
+
+def read_cusid(username)->str:
+    sql:str=f"SELECT customer_id FROM `customer` WHERE username ='{username}'"
+    conn=DATABASE.cursor(dictionary=True)
+    conn.execute(sql)
+    slist:list=conn.fetchall()[0]
+    return slist
 
 def SAVE_DB(data:dict):
     lastname:str = data.get("lastname")
@@ -68,6 +83,28 @@ def DELETEDATA(table:str,idno:int):
 		return False
 	return True
 
+def DELETEdefect(table:str,idno:int):
+	try:
+		sql:str = f"DELETE FROM `{table}` WHERE `defect_prod_id`={idno}"
+		cursor = DATABASE.cursor()
+		cursor.execute(sql)
+		DATABASE.commit()
+		cursor.close()
+	except Exception:
+		return False
+	return True
+
+def DELETEappoint(table:str,idno:int):
+	try:
+		sql:str = f"DELETE FROM `{table}` WHERE `appointment_id`={idno}"
+		cursor = DATABASE.cursor()
+		cursor.execute(sql)
+		DATABASE.commit()
+		cursor.close()
+	except Exception:
+		return False
+	return True
+
 def addproducts(data,flname,dt_string)->bool:
 	p_id = random.randint(10000,99999)
 	ptype:str = data.get("ptype")
@@ -83,12 +120,66 @@ def addproducts(data,flname,dt_string)->bool:
 	okey=True
 	return okey
 
+def adddefect(data)->bool:
+	ptype:int = data.get("ptype")
+	pname:str = data.get("pname")
+	sdi:int= data.get("sdi")
+	qty:int = data.get("qty")
+	dpprice:int = data.get("dpprice")
+	pdefect:str = data.get("pdefect")
+	sql = f"INSERT INTO `defect_prod_inventory` (`prod_detail_id`,`defect_prod_desc`,`product_name`,`quantity`,`product_price`,`product_type_id`) VALUE ('{sdi}','{pdefect}','{pname}','{qty}','{dpprice}','{ptype}')"
+	cursor = DATABASE.cursor()
+	cursor.execute(sql)
+	DATABASE.commit()
+	cursor.close()
+	okey=True
+	return okey
+
+def addapp(data,cusid,dt_string)->bool:
+	sid:int = data.get("sid")
+	dname:str = data.get("dname")
+	sdate:date = data.get("sdate")
+	edate:date = data.get("edate")
+	sql = f"INSERT INTO `appointment` (`customer_id`,`service_id`,`start_date`,`end_date`,`created_date`,`device_name`,`status`) VALUE ('{cusid}','{sid}','{sdate}','{edate}','{dt_string}','{dname}','pending')"
+	cursor = DATABASE.cursor()
+	cursor.execute(sql)
+	DATABASE.commit()
+	cursor.close()
+	okey=True
+	return okey
+
 def updateproducts(table:str,id:int,fields:list=[],new_data:list=[])->bool:
 	okey:bool=False
 	if len(fields)==len(new_data):
 		flds:str="`=%s, `".join(fields)
 		flds+="`=%s"
 		sql:str=f"UPDATE `{table}` SET `{flds} WHERE `product_id`={id}"
+		cursor = DATABASE.cursor()
+		cursor.execute(sql,new_data)
+		DATABASE.commit()
+		cursor.close()
+		okey=True
+	return okey
+
+def updatedefects(table:str,id:int,fields:list=[],new_data:list=[])->bool:
+	okey:bool=False
+	if len(fields)==len(new_data):
+		flds:str="`=%s, `".join(fields)
+		flds+="`=%s"
+		sql:str=f"UPDATE `{table}` SET `{flds} WHERE `defect_prod_id`={id}"
+		cursor = DATABASE.cursor()
+		cursor.execute(sql,new_data)
+		DATABASE.commit()
+		cursor.close()
+		okey=True
+	return okey
+
+def updateappointment(table:str,id:int,fields:list=[],new_data:list=[])->bool:
+	okey:bool=False
+	if len(fields)==len(new_data):
+		flds:str="`=%s, `".join(fields)
+		flds+="`=%s"
+		sql:str=f"UPDATE `{table}` SET `{flds} WHERE `appointment_id`={id}"
 		cursor = DATABASE.cursor()
 		cursor.execute(sql,new_data)
 		DATABASE.commit()
@@ -138,7 +229,31 @@ def get_products()->list:
 	return elist
 
 def get_defects()->list:
-	sql:str = f"select def.defect_prod_id as Defect_Product_ID, ps.prod_detail_id as Sale_Detail_ID, ps.product_type_id as Product_ID, def.product_name as Product_Name, ps.quantity as QTY, ps.sale_price as Product_Price from product_sale_detail ps, defect_prod_inventory def where ps.prod_detail_id = def.prod_detail_id"
+	sql:str = f"select defect_prod_id, prod_detail_id, product_type_id, product_name,defect_prod_desc, quantity, product_price from defect_prod_inventory;"
+	cursor = DATABASE.cursor(dictionary=True)
+	cursor.execute(sql)
+	elist:list = cursor.fetchall()
+	cursor.close()
+	return elist
+
+def get_custapp(username)->list:
+	sql:str = f"select a.appointment_id, s.service_id, st.service_type_name, a.device_name, a.start_date, a.end_date, a.status, a.updated_by from appointment a, service s, service_type st, customer c where a.service_id = s.service_id AND s.service_type_id = st.service_type_id AND a.customer_id = c.customer_id && c.username = '{username}';"
+	cursor = DATABASE.cursor(dictionary=True)
+	cursor.execute(sql)
+	elist:list = cursor.fetchall()
+	cursor.close()
+	return elist
+
+def getallcustapp()->list:
+	sql:str = f"select a.appointment_id, c.customer_id, c.firstname as customer_firstname, c.lastname as customer_lastname, s.service_id, st.service_type_name,a.device_name, a.start_date, a.end_date, a.status, a.updated_by from appointment a, customer c, service s, service_type st where a.service_id = s.service_id AND s.service_type_id = st.service_type_id AND a.customer_id = c.customer_id;"
+	cursor = DATABASE.cursor(dictionary=True)
+	cursor.execute(sql)
+	elist:list = cursor.fetchall()
+	cursor.close()
+	return elist
+
+def getallcustapp2()->list:
+	sql:str = f"select a.appointment_id, c.customer_id, c.firstname as customer_firstname, c.lastname as customer_lastname, s.service_id, st.service_type_name,a.device_name, a.start_date, a.end_date, a.status from appointment a, customer c, service s, service_type st where a.service_id = s.service_id AND s.service_type_id = st.service_type_id AND a.customer_id = c.customer_id;"
 	cursor = DATABASE.cursor(dictionary=True)
 	cursor.execute(sql)
 	elist:list = cursor.fetchall()

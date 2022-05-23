@@ -1,3 +1,7 @@
+/* html * {
+	outline: 1px solid red;	
+} */
+
 *{
 	margin: 0;
 	padding: 0;
@@ -52,6 +56,14 @@ img{
 	margin-top: 10px;
 }
 
+.table-container {
+	margin: 0 40px 0 245px;
+}
+
+.active {
+	border-left: 6px solid;
+}
+
 .wrapper .sidebar ul li{
 	padding: 15px;
 	border-bottom: 1px solid rgba(0,0,0,0.05);
@@ -97,52 +109,68 @@ img{
 
 .wrapper .main_content{
 	width: 100%;
-	margin-left: 200px;
 }
-
+/* start here */
 .wrapper .main_content .header{
-	padding: 20px;
+	display: flex;
+	width: 100%;
+	padding: 20px 50px 20px 245px;
 	background: #353658;
 	color: white;
 	border-bottom: 1px solid #e0e4e8;
 }
 
+.header-detail-side {
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+}
+
+.logout-side {
+	width: 10%;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.logout-btn {
+	border: none;
+	margin-left: auto;
+	width: 50px;
+}
+
+.top-table-container {
+	display: flex;
+	padding-bottom: 10px;
+}
+
+
+/* end here */
 .additem{
+	margin-right: auto;
 	background: #594f8d;
 	color: #fff;
-	top: 55%;
-	left: 310px;
-	position: absolute;
-	transform: translate(-50%,-50%);
-	box-sizing: border-box;
 	padding: 5px 30px;
 }
 
 .additem:hover{
 	cursor: pointer;
-	color: #594f8d;
+	color: white;
 	background: #2e2e2c;
 }
 
 .search{
-	top: 50%;
-	right: 207px;
-	position: absolute;
+	margin-right: 5px;
 	padding: 5px 20px;
 }
 
 .filter{
-	top: 50%;
-	right: 105px;
-	position: absolute;
-	padding: 5px 20px;
+	margin-right: 6px;
+	padding: 11px 20px;
 }
 
 .fa-solid{
-	top: 50%;
-	right: 50px;
-	position: absolute;
-	padding: 5px 15px;
+	padding: 13px 15px;
 	border: 1px solid black;
 	background: #594f8d;
 	color: white;
@@ -150,7 +178,7 @@ img{
 }
 
 .fa-solid:hover{
-	color: #594f8d;
+	color: white;
 	background: #2e2e2c;
 }
 
@@ -249,6 +277,10 @@ img{
  background: lightgrey;
  color: black;
  cursor: pointer;
+}
+
+.logout{
+	padding: 1px 70% 1px;
 }
 
 #clock{

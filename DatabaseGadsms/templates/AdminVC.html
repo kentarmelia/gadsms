@@ -11,69 +11,76 @@
 	<div class="wrapper">
 		<div class="sidebar">
 			<img src="{{ url_for('static', filename='images/gadsms_logo.png') }}">
-		<ul>
-			<li><a href="{{ url_for('adminhp')}}">Home</a></li>
-			<li><a href="{{ url_for('adminin')}}">Inventory</a></li>
-			<li><a href="{{ url_for('adminvs')}}">View Sales</a></li>
-			<li><a href="{{ url_for('adminap')}}">Appointment</a></li>
-			<li><a href="{{ url_for('adminem')}}">Employees</a></li>
-			<li><a href="{{ url_for('adminvc')}}">View Customer</a></li>
-			<li><a href="{{ url_for('admindi')}}">Defect Items</a></li>
-		</ul>
-		<div class="social_media">
-			<a href="#"><i class="fa-brands fa-facebook"></i></a>
-			<a href="#"><i class="fa-brands fa-google"></i></a>
-			<a href="#"><i class="fa-brands fa-twitter"></i></a>
+			<ul>
+				<li><a href="{{ url_for('adminhp')}}">Home</a></li>
+				<li><a href="{{ url_for('adminin')}}">Inventory</a></li>
+				<li><a href="{{ url_for('adminvs')}}">View Sales</a></li>
+				<li><a href="{{ url_for('adminap')}}">Appointment</a></li>
+				<li><a href="{{ url_for('adminem')}}">Employees</a></li>
+				<li class="active"><a href="{{ url_for('adminvc')}}">View Customer</a></li>
+				<li><a href="{{ url_for('admindi')}}">Defect Items</a></li>
+			</ul>
+			<div class="social_media">
+				<a href="#"><i class="fa-brands fa-facebook"></i></a>
+				<a href="#"><i class="fa-brands fa-google"></i></a>
+				<a href="#"><i class="fa-brands fa-twitter"></i></a>
 
+			</div>
 		</div>
-
-	</div>
-	<div class="main_content">
-		<div class="header">
-			{% for user in slist%}
-			{% for key,value in user.items() %}
-				{%if key == "firstname"%}
-					<p>Name: {{value}}
-				{%elif key == "lastname"%}
-					{{value}}</p>
-				{%elif key == "user_id"%}
-					<p>ID No. : {{value}}</p>
-				{%else%}
-					<p>Role : {{value}}</p>
-				{%endif%}
-			{% endfor %} 
-			{% endfor%}
-			<button><b><a href="/logout">LOG-OUT</a></b></button>
+		<div class="main_content">
+			<div class="header">
+				<div class="header-detail-side">
+						{% for user in slist%}
+						{% for key,value in user.items() %}
+							{%if key == "firstname"%}
+								<p>Name: {{value}}
+							{%elif key == "lastname"%}
+								{{value}}</p>
+							{%elif key == "user_id"%}
+								<p>ID No. : {{value}}</p>
+							{%else%}
+								<p>Role : {{value}}</p>
+							{%endif%}
+						{% endfor %} 
+						{% endfor%}	
+				</div>
+				<div class="logout-side">
+					<button class="logout-btn"><a href="/logout"><i class="fas fa-sign-out-alt"></i></a></button>
+				</div>
+			</div>
+			<br>
+			<br>
+			<div class="table-container">
+				<div class="top-table-container">
+					<input type="text" name="" placeholder="Search here..." class="search">
+					<form>
+						<select name="Filter by" class="filter">
+							<option value="1">Filter</option>
+							<option value="2">Filter</option>
+							<option value="3">Filter</option>
+							<option value="4">Filter</option>
+						</select>
+					</form>
+					<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+				</div>
+				<table class="w3-table-all w3--card-4 w3-text-black">
+					<tr>
+						{% for h in pageheader %}
+							<th>{{ h | upper }}</th>
+						{% endfor %}
+					</tr>
+					{% for item in plist %}
+					<tr>
+						{% for key,value in item.items() %}
+						<td>
+							{{ value | upper }}
+						</td>
+						{% endfor %}
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
 		</div>
-		<input type="text" name="" placeholder="Search here..." class="search">
-		<form>
-			<select name="Filter by" class="filter">
-				<option value="1">Filter</option>
-				<option value="2">Filter</option>
-				<option value="3">Filter</option>
-				<option value="4">Filter</option>
-			</select>
-		</form>
-		<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
-		<br><br>
-		<table class="w3-table-all w3--card-4 w3-text-black">
-			<tr>
-				{% for h in pageheader %}
-					<th>{{ h | upper }}</th>
-				{% endfor %}
-			</tr>
-			{% for item in plist %}
-			<tr>
-				{% for key,value in item.items() %}
-				<td>
-					{{ value | upper }}
-				</td>
-				{% endfor %}
-			</tr>
-			{% endfor %}
-		</table>
-
 	</div>
-
 </body>
 </html>

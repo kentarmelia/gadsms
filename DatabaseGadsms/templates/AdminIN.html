@@ -92,19 +92,57 @@
 	</div>
 	<div class="w3-modal" id ="addproductmodal"> 
 		<div class ="w3-modal-content w3-animate-zoom">
-			<div class = "w3-container w3-blue">
-				<h3>Product information</h3>
+			<div class = "w3-container popup">
 				<button class="w3-button w3-display-topright" onclick="document.getElementById('addproductmodal').style.display='none'">&times;</button>
-			</div>
-			<div class="w3-container">
-				<form action="/addproduct" method="post" name="studentform">
+				<h1>Product Information</h1>
+				<form action="/addproduct" method="post" name="studentform" class="add-item-form">
 					<!--Saving Flag-->
 					<!--Flag: '-' add student--->
 					<!--Flag: '1++' update student--->
 					<input type="hidden" name="flag" id="flag" value="0">
 					<input type="hidden" name="id" id="id">
+					<ul>
+		            	<li>
+		            		Product Type
+	            			<select name="ptype" id="ptype" required>
+								<option value="141857">Oppo Smartphone</option>
+								<option value="141859">Logitech Mouse</option>
+								<option value="141871">Samsung Monitor</option>
+								<option value="141858">Asus Laptop</option>
+							</select>
+		            	</li>
+		            	<li>
+		            		Product Name
+							<input type="text" name="pname" id="pname" required>
+		            	</li>
+		            	<li>
+		            		Product Price
+		            		<input type="text" name="pprice" id="pprice" required>
+		            	</li>
+		            	<li>
+		            		Stock Quantity
+		            		<input type="text" name="qty" id="qty" required>
+		            	</li>
+		            	<li>
+		            		Discounted Price
+		            		<input type="text" name="dprice" id="dprice" required>
+		            	</li>
+		            	<li>
+		            		Created date
+		            		<input type="date" name="">
+		            	</li>
+		            	<br>
+		            	<br>
+		            	<br>
+		            	<li style="text-align: center;">
+		            		<button type="submit" value="SAVE" class="gadsms-button">Save</button>
+		            	</li>
+		            	<li style="text-align: center;">
+		            		<button onclick="document.getElementById('addproductmodal').style.display='none'" class="gadsms-button cancel">Cancel</button>
+		            	</li>
+		            </ul>
 					<br><br>
-					<p>
+					<!-- <p>
 						<label>Product Type:</label>
 						<select class="w3-select w3-border" style="width:23%" name="ptype" id="ptype" required>
 							<option value="141857">Oppo Smartphone</option>
@@ -112,14 +150,14 @@
 							<option value="141871">Samsung Monitor</option>
 							<option value="141858">Asus Laptop</option>
 						</select>
-					</p>
-					<br>
+					</p> -->
+					<!-- <br>
 					<p>
 						<label>Product Name: </label>
 						<input type="text" class="w3-border" name="pname" id="pname" required>
 					</p>
-					<br>
-					<p>
+					<br> -->
+					<!-- <p>
 						<label>Product Price: </label>
 						<input type="text" class="w3-border" name="pprice" id="pprice" required>
 					</p>
@@ -133,12 +171,11 @@
 						<label>Discounted P Qrice: </label>
 						<input type="text" class="w3-border" name="dprice" id="dprice" required>
 					</p>
-					<br>
-					<b><p>
+					<br> -->
+					<!-- <b><p>
 						<input class="w3-button w3-text-blue w3-border w3-border-blue " type="submit" value="SAVE">
 					</p></b>
-					<br> 
-					
+					<br>  -->				
 				</form>
 			</div>
 		</div>

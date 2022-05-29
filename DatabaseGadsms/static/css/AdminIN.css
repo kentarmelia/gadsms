@@ -292,3 +292,68 @@ img{
 	font-family: verdana;
 	margin-top: 5%;
 }
+
+
+
+.popup {
+	/*ikay bahala adjust ani bornzz*/
+	height: 600px;
+}
+
+.popup h1 {
+	padding: 50px 0 30px;
+	text-align: center;
+}
+
+/*add form css*/
+.add-item-form {
+	margin: auto;
+	width: 500px;
+	height: auto;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.add-item-form li + li {
+	margin-top: 10px;
+}
+
+.add-item-form input, .add-item-form select {
+	float: right;
+	width: 190px;
+}
+
+h2 {
+	text-align: center;
+	padding-bottom: 20px;
+}
+/*------------------------*/
+
+/*gadsms buttons css*/
+.gadsms-button {
+	padding: 5px 10px;
+	width: 160px;
+	background-color: #242544;
+	color: #fff;
+	border: none;
+	transition: .3s ease;
+}
+
+.cancel {
+	background-color: #898983;
+	color: #000;
+}
+
+.gadsms-button:hover {
+	color: #fff;
+	background-color: #4f568a;
+}
+
+.cancel:hover {
+	background-color: #b7b6af;
+}
+/*------------------------*/

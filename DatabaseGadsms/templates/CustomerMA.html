@@ -1,6 +1,89 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="shortcut icon" type="x-icon" href="{{ url_for('static', filename='images/gadsms_logo.png') }}">
+	<title>GadSMS: Gadget Shop Management Shop</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/CustomerMA.css') }}">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<script src="https://kit.fontawesome.com/05f5e3eb98.js" crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="sidebar">
+			<img src="{{ url_for('static', filename='images/gadsms_logo.png') }}">
+			<ul>
+				<li><a href="{{ url_for('customerap')}}">Appointment</a></li>
+				<li class="active"><a href="{{ url_for('customerma')}}">My Account</a></li>
+			</ul>
+			<div class="social_media">
+				<a href="#"><i class="fa-brands fa-facebook"></i></a>
+				<a href="#"><i class="fa-brands fa-google"></i></a>
+				<a href="#"><i class="fa-brands fa-twitter"></i></a>
+
+			</div>
+		</div>
+	<div class="main_content">
+		<div class="header">
+			<div class="header-detail-side">
+					{% for user in slist%}
+					{% for key,value in user.items() %}
+						{%if key == "firstname"%}
+							<p>Name: {{value}}
+						{%elif key == "lastname"%}
+							{{value}}</p>
+						{%else%}
+							<p>ID No. : {{value}}</p>	
+						{%endif%}
+					{% endfor %} 
+					{% endfor%}
+			</div>
+			<div class="logout-side">
+				<button class="logout-btn"><a href="/logout"><i class="fas fa-sign-out-alt"></i></a></button>
+			</div>
+		</div>
+		<br>
+		<br>
+		<form action="" method="">
+			<div class="table-container">
+				<div class="aibox">
+					<h1>Account Information</h1>
+					<ul>
+						<p>First Name</p>
+						<input type="text" name="" placeholder="&nbsp;First Name" required>
+						<p>Last Name</p>
+						<input type="text" name="" placeholder="&nbsp;Last Name" required>
+						<p>Email</p>
+						<input type="text" name="" placeholder="&nbsp;Email" required>
+						<p>Contact No.</p>
+						<input type="text" name="" placeholder="&nbsp;Contact No." required>
+						<p>Address</p>
+						<input type="text" name="" placeholder="&nbsp;Address" required>
+					</ul>
+				</div>
+				<div class="cpbox">
+					<h1>Change Password</h1>
+					<ul>
+						<p>Current Password</p>
+						<input type="password" name="" placeholder="&nbsp;Enter Current Password" required>
+						<p>New Password</p>
+						<input type="password" name="" placeholder="&nbsp;Enter New Password" required>
+						<p>Confirm Password</p>
+						<input type="password" name="" placeholder="&nbsp;Confirm Password" required>
+					</ul>
+				</div>
+			</div>
+			<div class="table-container" style="width: 1000px;">
+				<input type="button" name="" value="Save Changes" class="save">
+				<input type="button" name="" value="Cancel" class="cancel">
+				<input type="button" name="" value="Remove Account" class="remove">
+			</div>
+		</form>
+	</div>
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html>
+<head>
 	<link rel="shortcut icon" type="x-icon" href="g{{ url_for('static', filename='images/gadsms_logo.png') }}">
 	<title>GadSMS: Gadget Shop Management Shop</title>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/CustomerMA.css') }}">
@@ -76,4 +159,4 @@
 	</div>
 
 </body>
-</html>
+</html> -->

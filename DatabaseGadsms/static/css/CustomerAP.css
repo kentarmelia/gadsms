@@ -53,6 +53,14 @@ img{
 	margin-top: 10px;
 }
 
+.table-container {
+	margin: 0 40px 0 245px;
+}
+
+.active {
+	border-left: 6px solid;
+}
+
 .wrapper .sidebar ul li{
 	padding: 15px;
 	border-bottom: 1px solid rgba(0,0,0,0.05);
@@ -99,50 +107,67 @@ img{
 
 .wrapper .main_content{
 	width: 100%;
-	margin-left: 200px;
 }
 
+/* start here */
 .wrapper .main_content .header{
-	padding: 20px;
+	display: flex;
+	width: 100%;
+	padding: 20px 50px 20px 245px;
 	background: #353658;
 	color: white;
 	border-bottom: 1px solid #e0e4e8;
 }
 
-.bookitem{
+.header-detail-side {
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+}
+
+.logout-side {
+	width: 10%;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.logout-btn {
+	border: none;
+	margin-left: auto;
+	width: 50px;
+}
+
+.top-table-container {
+	display: flex;
+	padding-bottom: 10px;
+}
+
+.additem{
+	margin-right: auto;
 	background: #594f8d;
 	color: #fff;
-	top: 58%;
-	left: 298px;
-	position: absolute;
-	transform: translate(-50%,-50%);
-	box-sizing: border-box;
 	padding: 5px 30px;
 }
 
-.bookitem:hover{
+.additem:hover{
+	cursor: pointer;
+	color: white;
 	background: #2e2e2c;
 }
 
 .search{
-	top: 53%;
-	right: 507px;
-	position: absolute;
+	margin-right: 5px;
 	padding: 5px 20px;
 }
 
 .filter{
-	top: 53%;
-	right: 405px;
-	position: absolute;
-	padding: 5px 20px;
+	margin-right: 6px;
+	padding: 11px 20px;
 }
 
 .fa-solid{
-	top: 53%;
-	right: 350px;
-	position: absolute;
-	padding: 5px 15px;
+	padding: 13px 15px;
 	border: 1px solid black;
 	background: #594f8d;
 	color: white;
@@ -150,7 +175,7 @@ img{
 }
 
 .fa-solid:hover{
-	color: #594f8d;
+	color: white;
 	background: #2e2e2c;
 }
 
@@ -223,3 +248,67 @@ img{
 	font-family: verdana;
 	margin-top: 5%;
 }
+
+
+.popup {
+	/*ikay bahala adjust ani bornzz*/
+	height: 600px;
+}
+
+.popup h1 {
+	padding: 50px 0 30px;
+	text-align: center;
+}
+
+/*add form css*/
+.add-item-form {
+	margin: auto;
+	width: 500px;
+	height: auto;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.add-item-form li + li {
+	margin-top: 10px;
+}
+
+.add-item-form input, .add-item-form select {
+	float: right;
+	width: 190px;
+}
+
+h2 {
+	text-align: center;
+	padding-bottom: 20px;
+}
+/*------------------------*/
+
+/*gadsms buttons css*/
+.gadsms-button {
+	padding: 5px 10px;
+	width: 160px;
+	background-color: #242544;
+	color: #fff;
+	border: none;
+	transition: .3s ease;
+}
+
+.cancel {
+	background-color: #898983;
+	color: #000;
+}
+
+.gadsms-button:hover {
+	color: #fff;
+	background-color: #4f568a;
+}
+
+.cancel:hover {
+	background-color: #b7b6af;
+}
+/*------------------------*/

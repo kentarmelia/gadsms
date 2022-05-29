@@ -1,3 +1,7 @@
+/*html * {
+	outline: 1px solid red;
+}*/
+
 *{
 	margin: 0;
 	padding: 0;
@@ -15,13 +19,13 @@ button{
 	background: #4f568a;
 	color: #fff;
 	
-	}
+}
 	
 button:hover{
 	cursor: pointer;
 	background: white;
 	color: #4f568a;
-	}
+}
 	
 body{
 	width: 100%;

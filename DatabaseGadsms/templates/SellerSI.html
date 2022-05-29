@@ -4,78 +4,184 @@
 	<link rel="shortcut icon" type="x-icon" href="{{ url_for('static', filename='images/gadsms_logo.png') }}">
 	<title>GadSMS: Gadget Shop Management Shop</title>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/SellerSI.css') }}">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<script src="https://kit.fontawesome.com/05f5e3eb98.js" crossorigin="anonymous"></script>
 </head>
 <body>
 	<div class="wrapper">
 		<div class="sidebar">
 			<img src="{{ url_for('static', filename='images/gadsms_logo.png') }}">
-		<ul>
-			<li><a href="{{ url_for('sellersi')}}">Sell Items</a></li>
-			<li><a href="{{ url_for('sellervc')}}">View Customer</a></li>
-			
-		</ul>
-		<div class="social_media">
-			<a href="#"><i class="fa-brands fa-facebook"></i></a>
-			<a href="#"><i class="fa-brands fa-google"></i></a>
-			<a href="#"><i class="fa-brands fa-twitter"></i></a>
-
-		</div>
-
+			<ul>
+				<li class="active"><a href="{{ url_for('sellersi')}}">Sell Items</a></li>
+				<li><a href="{{ url_for('sellervc')}}">View Customer</a></li>
+				
+			</ul>
+			<div class="social_media">
+				<a href="#"><i class="fa-brands fa-facebook"></i></a>
+				<a href="#"><i class="fa-brands fa-google"></i></a>
+				<a href="#"><i class="fa-brands fa-twitter"></i></a>
+			</div>
 	</div>
 	<div class="main_content">
 		<div class="header">
-			{% for user in slist%}
-			{% for key,value in user.items() %}
-				{%if key == "firstname"%}
-					<p>Name: {{value}}
-				{%elif key == "lastname"%}
-					{{value}}</p>
-				{%elif key == "user_id"%}
-					<p>ID No. : {{value}}</p>
-				{%else%}
-					<p>Role : {{value}}</p>
-				{%endif%}
-			{% endfor %} 
-			{% endfor%}
-			<button><b><a href="/logout">LOG-OUT</a></b></button>
+			<div class="header-detail-side">
+					{% for user in slist%}
+					{% for key,value in user.items() %}
+						{%if key == "firstname"%}
+							<p>Name: {{value}}
+						{%elif key == "lastname"%}
+							{{value}}</p>
+						{%elif key == "user_id"%}
+							<p>ID No. : {{value}}</p>
+						{%else%}
+							<p>Role : {{value}}</p>
+						{%endif%}
+					{% endfor %} 
+					{% endfor%}	
+			</div>
+			<div class="logout-side">
+				<button class="logout-btn"><a href="/logout"><i class="fas fa-sign-out-alt"></i></a></button>
+			</div>
 		</div>
-
-		<input type="text" name="" placeholder="Search here..." class="search">
-		<form>
-			<select name="Filter by" class="filter">
-				<option value="1">Filter</option>
-				<option value="2">Filter</option>
-				<option value="3">Filter</option>
-				<option value="4">Filter</option>
-			</select>
-		</form>
-		<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
-		<div class="info">
-			
-				<p>PRODUCT ID</p>
-				<p>PRODUCT TYPE</p>
-				<p>PRODUCT NAME</p>
-				<p>PRICE</p>
-			
-		</div>
-		<div class="info1">
-			
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00135003</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Portable Mic</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Microphones</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;500.00</p>
-		</div>
-		<div class="info2">
-			
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;00133407</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Waterproof</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Digital Camera</p>
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;800.00</p>
-		</div>
-		</div>
-
+		<br>
+		<br>
+		<div class="table-container">
+			<div class="table-right-side">
+				<div class="top-table-container">
+					<input type="text" name="" placeholder="Search here..." class="search">
+					<form>
+						<select name="Filter by" class="filter">
+							<option value="1">Filter</option>
+							<option value="2">Filter</option>
+							<option value="3">Filter</option>
+							<option value="4">Filter</option>
+						</select>
+					</form>
+					<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+				</div>
+				<table class="w3-table-all w3--card-4 w3-text-black" id="sellproduct">
+					<tr>
+						{% for h in pageheader %}
+							<th>{{ h | upper }}</th>
+						{% endfor %}
+					</tr>
+					{% for item in plist %}
+					<tr>
+						{% for key,value in item.items() %}
+						<td>
+							{{ value | upper }}
+						</td>
+						{% endfor %}
+						<td>
+							<button onclick="sellproduct('{{item['product_id']}}','{{item['product_name']}}','{{item['product_price']}}','{{item['discount_price']}}')">&#x2B;</button>				
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+			<div class="table-left-side">
+				<div class="sale-detail-container">
+					<h2>CUSTOMER PURCHASES</h2>
+					<form action="/purchase" method="POST" class="sale-detail-wrapper">
+						<div style="height:500px;overflow:auto;">
+						<table class="w3-table-all w3--card-4 w3-text-black sale" id="prodtable">
+							<tr>
+								<th>Product ID</th>
+								<th>Product Name</th>
+								<th>Price</th>
+								<th style="width: 20%;">Qty</th>
+								<th>Price Total</th>
+								<th>Delete</th>
+								
+							</tr>
+						</table>
+						</div>
+						<br>
+						<h3>SubTotal:
+						<input type="text" id="total" value="0" disabled></h3>
+						<br><br>
+						<button type="submit" name="pay" value="Pay" class="pay-btn">Pay</button>
+					</form>
+				</div>			
+			</div>
+		</div>	
 	</div>
+	<script>
+		function sellproduct(id,pname,pprice,dprice) {
+		  var table = document.getElementById("prodtable"); 
+		  for (var i = 0; i < prodtable.rows.length; i++){
+			if(table.rows[i].cells[0].innerText == id){
+				alert('This item is already added to the cart')
+				return
+			}
 
+		  }
+		  var row = table.insertRow(1);
+		  var cell1 = row.insertCell(0);
+		  var cell2 = row.insertCell(1);
+		  var cell3 = row.insertCell(2);
+		  var cell4 = row.insertCell(3);
+		  var cell5 = row.insertCell(4);
+		  var cell6 = row.insertCell(5);
+
+		  cell1.innerHTML = id;
+		  cell2.innerHTML = pname;
+		  cell4.innerHTML = "<input type='number' id='qty' class='qty' value='1' min='1' onchange='updatetotal(this.value)'>"
+		  var qty = document.getElementById('qty').value;
+		  num = pprice - (pprice*dprice);
+		  num = Math.round(num * 100)/100
+		  cell3.innerHTML = num;
+		  cell5.innerHTML = num;
+		  cell6.innerHTML = "<input type='button' value='&#9249;' onclick='deleteRow(this)'>"
+		  total()
+		}
+
+
+		function updatetotal(t){
+    		var table = document.getElementById('prodtable');
+			var total = 0
+			var newtotal = 0
+    		for(let i = 1; i<table.rows.length; i++){
+				
+				table.rows[i].onclick = function(){
+					num1 = Number(table.rows[i].cells[2].innerText)*t;
+					prodtable.rows[i].cells[4].innerHTML = num1.toFixed(2);
+					
+					total= total+Number(table.rows[i].cells[4].innerText)
+					 console.log(total)
+					addtotal(total)
+				};
+    		}
+		}
+
+		function total(){
+    		var table = document.getElementById('prodtable');
+    		let total = 0
+    		for(let i = 1; i<table.rows.length; i++){
+        		total+=Number(table.rows[i].cells[4].innerText)
+    		}
+    		const totalInput = document.getElementById('total')
+    		totalInput.value=total
+
+		}
+
+		function addtotal(r){
+    		var table = document.getElementById('prodtable');
+    		let total = 0
+    		for(let i = 1; i<table.rows.length; i++){
+        		total+=Number(table.rows[i].cells[4].innerText)
+				console.log(r)
+    		}
+    		const totalInput = document.getElementById('total')
+    		totalInput.value=total.toFixed(2)
+
+		}
+
+		function deleteRow(r) {
+  			var i = r.parentNode.parentNode.rowIndex;
+ 			document.getElementById("prodtable").deleteRow(i);
+			total()
+		}			
+		</script>
 </body>
 </html>

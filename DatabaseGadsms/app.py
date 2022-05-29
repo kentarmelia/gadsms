@@ -175,13 +175,20 @@ def customerma():
 @app.route("/sellersi")
 def sellersi():
     if "username" in session:
+        uname = request.args.get('uname', None)
         username = session["username"]
+        hlist:list=['PRODUCT ID','PRODUCT TYPE NAME','PRODUCT NAME','PRODUCT DESC.','STOCK QTY','PRODUCT PRICE','DISCOUNT PRICE','ACTION']
+        plist = get_products()
         slist = getstaff(username)
-        return render_template("SellerSI.html",slist = slist)
+        return render_template("SellerSI.html",slist = slist,pageheader = hlist,plist = plist,uname=uname)
     else:
         if "username" in session:
             return redirect(url_for("sellersi"))
         return redirect(url_for("login"))
+
+@app.route("/purchase",methods=["POST"])
+def purchase():
+    return "ok"
 
 @app.route("/sellervc")
 def sellervc():
@@ -254,7 +261,7 @@ def addproduct():
             else:
                 message = "Error adding Product"
         if flag == 1:
-            okey:bool=updateproducts("inventory",pid,fields,data,"product_id")
+            okey:bool=updateproducts("inventory",pid,fields,data)
             if okey:
                 message = "Product updated"
             else:
@@ -402,4 +409,5 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",debug=True)
+    app.run(host='0.0.0.0', debug=True)
+

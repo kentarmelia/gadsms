@@ -9,7 +9,7 @@
 	<img src="{{ url_for('static', filename='images/gadsms.jpg') }}" class="intro">
 	<form action="/addcustomer" method="POST">
 		<div class="regbox">
-			<h1>Register Here</h1>
+			<h1>Register</h1>
 		
 				<p>Lastname</p>
 				<input type="text" name="lastname" placeholder="Last Name" required>
@@ -23,18 +23,23 @@
 				<input type="text" name="contact" placeholder="Contact No." required>
 				<p>Username</p>
 				<input type="text" name="username" placeholder="Enter Username" required>
+				
+				<p class="pass">Password</p>
+				<input type="password" name="password" placeholder="Enter Password" required>
+				<p>Confirm Password</p>
+				<input type="password" name="password2" placeholder="Confirm Password" required>
 			
-			<input type="submit" name="submit" value="Register">
-			<a href="{{ url_for('login')}}">Login</a><br>
+				<input type="submit" name="submit" value="Register">
+				<a href="{{ url_for('login')}}">Login</a>
 		
 
 		</div>
-		<div class="passbox">
+<!-- 		<div class="passbox">
 			<p class="pass">Password</p>
 			<input type="password" name="password" placeholder="Enter Password" required>
 			<p>Confirm Password</p>
 			<input type="password" name="password2" placeholder="Confirm Password" required>
-		</div>
+		</div> -->
 	</form>
 
 </body>

@@ -4,17 +4,15 @@
 	<link rel="shortcut icon" type="x-icon" href="{{ url_for('static', filename='images/gadsms_logo.png') }}">
 	<title>GadSMS: Gadget Shop Management Shop</title>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/AdminHP.css') }}">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<script src="https://kit.fontawesome.com/05f5e3eb98.js" crossorigin="anonymous"></script>
-	<script src="script.js"></script>
 </head>
 <body>
-	
-	<div id="clock"></div>
 	<div class="wrapper">
 		<div class="sidebar">
 			<img src="{{ url_for('static', filename='images/gadsms_logo.png') }}">
 		<ul>
-			<li><a href="{{ url_for('adminhp')}}">Home</a></li>
+			<li class="active"><a href="{{ url_for('adminhp')}}">Home</a></li>
 			<li><a href="{{ url_for('adminin')}}">Inventory</a></li>
 			<li><a href="{{ url_for('adminvs')}}">View Sales</a></li>
 			<li><a href="{{ url_for('adminap')}}">Appointment</a></li>
@@ -32,31 +30,31 @@
 	</div>
 	<div class="main_content">
 		<div class="header">
-			{% for user in slist%}
-			{% for key,value in user.items() %}
-				{%if key == "firstname"%}
-					<p>Name: {{value}}
-				{%elif key == "lastname"%}
-					{{value}}</p>
-				{%elif key == "user_id"%}
-					<p>ID No. : {{value}}</p>
-				{%else%}
-					<p>Role : {{value}}</p>
-				{%endif%}
-			{% endfor %} 
-			{% endfor%}
-			<button><b><a href="/logout">LOG-OUT</a></b></button>
+			<div class="header-detail-side">
+					{% for user in slist%}
+					{% for key,value in user.items() %}
+						{%if key == "firstname"%}
+							<p>Name: {{value}}
+						{%elif key == "lastname"%}
+							{{value}}</p>
+						{%elif key == "user_id"%}
+							<p>ID No. : {{value}}</p>
+						{%else%}
+							<p>Role : {{value}}</p>
+						{%endif%}
+					{% endfor %} 
+					{% endfor%}	
+			</div>
+			<div class="logout-side">
+				<button class="logout-btn"><a href="/logout"><i class="fas fa-sign-out-alt"></i></a></button>
+			</div>
 		</div>
-		
-		<div class="overview">
-			<div>Overview</div>
-		</div>
-		<div class="monthly">
-			<div>Monthly Sales</div>
-		</div>
-		</div>
-
+		<br>
+		<br>
+		<div class="table-container">
+			<h1>Overview</h1>
+			<h1>Monthly Sales</h1>
+		</div>	
 	</div>
-
 </body>
 </html>

@@ -11,8 +11,8 @@
 	<div class="wrapper">
 		<div class="sidebar">
 			<img src="{{ url_for('static', filename='images/gadsms_logo.png') }}">
-		<ul>
-			<li><a href="{{ url_for('technicianap')}}">Appointment</a></li>
+		<ul> <!-- active class for tabs -->
+			<li class="active"><a href="{{ url_for('technicianap')}}">Appointment</a></li>
 			<li><a href="{{ url_for('technicianvc')}}">View Customer</a></li>
 			
 		</ul>
@@ -25,7 +25,8 @@
 
 	</div>
 	<div class="main_content">
-		<div class="header">
+		<!-- header start -->
+		<!-- <div class="header">
 			{% for user in slist%}
 			{% for key,value in user.items() %}
 				{%if key == "firstname"%}
@@ -40,9 +41,32 @@
 			{% endfor %} 
 			{% endfor%}
 			<button><b><a href="/logout">LOG-OUT</a></b></button>
+		</div> -->
+		<div class="header">
+			<div class="header-detail-side">
+					{% for user in slist%}
+					{% for key,value in user.items() %}
+						{%if key == "firstname"%}
+							<p>Name: {{value}}
+						{%elif key == "lastname"%}
+							{{value}}</p>
+						{%elif key == "user_id"%}
+							<p>ID No. : {{value}}</p>
+						{%else%}
+							<p>Role : {{value}}</p>
+						{%endif%}
+					{% endfor %} 
+					{% endfor%}	
+			</div>
+			<div class="logout-side">
+				<button class="logout-btn"><a href="/logout"><i class="fas fa-sign-out-alt"></i></a></button>
+			</div>
 		</div>
+		<!-- header end -->
 
-		<input type="text" name="" placeholder="Search here..." class="search">
+
+		<!-- top table content -->
+		<!-- <input type="text" name="" placeholder="Search here..." class="search">
 		<form>
 			<select name="Filter by" class="filter">
 				<option value="1">Filter</option>
@@ -51,37 +75,51 @@
 				<option value="4">Filter</option>
 			</select>
 		</form>
-		<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
-		<br>
-		<table class="w3-table-all w3--card-4 w3-text-black">
-			<tr>
-				{% for h in pageheader %}
-					<th>{{ h | upper }}</th>
-				{% endfor %}
-			</tr>
-			{% for item in plist |sort(attribute='status', reverse = True)%}
-			<tr>
-				{% for key,value in item.items() %}
-				<td>
-					{{ value | upper }}
-				</td>
-				{% endfor %}
-				{% for key,value in item.items() %}
-				{% if value == "pending"%}
-				<td>
-					<button onclick="doneappointment('{{item['appointment_id']}}')">&#10003;</button>				
-				</td>
-				{%endif%}
-				{% if value == "Done"%}
-				<td>
-					<button disabled>&#10134;</button>				
-				</td>
-				{%endif%}
+		<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a> -->
+		<br><br>
+		<div class="table-container"><!-- added -->
+			<div class="top-table-container"><!-- added -->
+				<input type="text" name="" placeholder="Search here..." class="search">
+				<form>
+					<select name="Filter by" class="filter">
+						<option value="1">Filter</option>
+						<option value="2">Filter</option>
+						<option value="3">Filter</option>
+						<option value="4">Filter</option>
+					</select>
+				</form>
+				<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+			</div>
+			<table class="w3-table-all w3--card-4 w3-text-black">
+				<tr>
+					{% for h in pageheader %}
+						<th>{{ h | upper }}</th>
+					{% endfor %}
+				</tr>
+				{% for item in plist |sort(attribute='status', reverse = True)%}
+				<tr>
+					{% for key,value in item.items() %}
+					<td>
+						{{ value | upper }}
+					</td>
+					{% endfor %}
+					{% for key,value in item.items() %}
+					{% if value == "pending"%}
+					<td>
+						<button onclick="doneappointment('{{item['appointment_id']}}')">&#10003;</button>				
+					</td>
+					{%endif%}
+					{% if value == "Done"%}
+					<td>
+						<button disabled>&#10134;</button>				
+					</td>
+					{%endif%}
 
+					{% endfor %}
+				</tr>
 				{% endfor %}
-			</tr>
-			{% endfor %}
-		</table>
+			</table>
+		</div>
 	</div>
 	<script>
 		function doneappointment(id){

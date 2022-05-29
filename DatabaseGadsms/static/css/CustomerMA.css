@@ -1,3 +1,7 @@
+/*html * {
+	outline: 1px solid red;
+}*/
+
 *{
 	margin: 0;
 	padding: 0;
@@ -25,14 +29,20 @@ button:hover{
 body{
 	width: 100%;
 	height: 100vh;
-	background: linear-gradient(-45deg, #9618f7, #a3c9e2);
+	/*background: linear-gradient(-45deg, #9618f7, #a3c9e2);*/
 }
 
 .wrapper{
+	height: 100%;
 	display: flex;
 	position: relative;
 
 }
+
+.active {
+	border-left: 6px solid;
+}
+
 
 .wrapper .sidebar{
 	position: fixed;
@@ -51,6 +61,12 @@ img{
 	height: 80px;
 	margin-bottom: 40px;
 	margin-top: 10px;
+}
+
+.table-container {
+	display: flex;
+	height: auto;
+	margin: 0 40px 40px 245px;
 }
 
 .wrapper .sidebar ul li{
@@ -98,23 +114,45 @@ img{
 
 .wrapper .main_content{
 	width: 100%;
-	margin-left: 200px;
 }
 
 .wrapper .main_content .header{
-	padding: 20px;
+	display: flex;
+	width: 100%;
+	padding: 20px 50px 20px 245px;
 	background: #353658;
 	color: white;
 	border-bottom: 1px solid #e0e4e8;
 }
 
+.header-detail-side {
+	width: 90%;
+	display: flex;
+	flex-direction: column;
+}
+
+.logout-side {
+	width: 10%;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.logout-btn {
+	border: none;
+	margin-left: auto;
+	width: 50px;
+}
+
+.top-table-container {
+	display: flex;
+	padding-bottom: 10px;
+}
+
 .aibox{
-	margin-top: 50px;
-	margin-left: 260px;
 	width: 400px;
-	height: 400px;
-	position: absolute;
-	box-sizing: border-box;
+	height: auto;
+	margin-right: 200px;
 }
 
 .aibox h1{
@@ -151,12 +189,8 @@ img{
 }
 
 .cpbox{
-	margin-top: 50px;
-	margin-left: 850px;
 	width: 400px;
-	height: 400px;
-	position: absolute;
-	box-sizing: border-box;
+	height: auto;
 }
 
 .cpbox h1{
@@ -165,7 +199,7 @@ img{
 
 .cpbox p{
 	margin: 0;
-	padding: 0;
+	padding: 2px 2px;
 	font-weight: bold;
 }
 
@@ -192,28 +226,22 @@ img{
 .save{
 	background: #594f8d;
 	color: #fff;
-	top: 45vw;
-	left: 30%;
-	position: absolute;
-	transform: translate(-50%,-50%);
 	box-sizing: border-box;
 	padding: 5px 30px;
+	margin-right: 100px;
 }
 
 .save:hover{
-	color: #594f8d;
+	color: #fff;
 	background: #2e2e2c;
 }
 
 .cancel{
 	background: lightgrey;
 	color: grey;
-	top: 45vw;
-	left: 42%;
-	position: absolute;
-	transform: translate(-50%,-50%);
 	box-sizing: border-box;
 	padding: 5px 30px;
+	margin-right: auto;
 }
 
 .cancel:hover{
@@ -224,10 +252,6 @@ img{
 .remove{
 	background: lightgrey;
 	color: grey;
-	top: 45vw;
-	left: 85%;
-	position: absolute;
-	transform: translate(-50%,-50%);
 	box-sizing: border-box;
 	padding: 5px 30px;
 }

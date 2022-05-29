@@ -1,3 +1,7 @@
+/*html * {
+	outline: 1px solid red;
+}*/
+
 body{
 	margin: 0;
 	padding: 0;
@@ -16,8 +20,8 @@ body{
 }
 
 .regbox{
-	width: 400px;
-	height: 650px;
+	width: 600px;
+	height: auto;
 	background: #2e2e2c;
 	color: #fff;
 	top: 50%;
@@ -25,11 +29,12 @@ body{
 	position: absolute;
 	transform: translate(-50%,-50%);
 	box-sizing: border-box;
-	padding: 70px 40px;
+	border-radius: 10px;
+	padding: 40px 70px;
 
 }
 
-.passbox{
+/*.passbox{
 	width: 350px;
 	height: 650px;
 	background: #2e2e2c;
@@ -40,7 +45,7 @@ body{
 	transform: translate(-50%,-50%);
 	box-sizing: border-box;
 	padding: 70px 40px;
-}
+}*/
 
 h1{
 	margin: 0;
@@ -60,7 +65,7 @@ h1{
 	margin-bottom: 20px;
 	
 }
-.regbox input[type="text"]{
+.regbox input/*[type="text"]*/{
 	border: none;
 	border-bottom: 1px solid #fff;
 	background: transparent;
@@ -79,12 +84,12 @@ h1{
 	
 }
 
-.regbox input[type="text"]:hover{
+.regbox input:hover{
 	background: lightgrey;
 	color: black;
 }
 
-.passbox p{
+/*.passbox p{
 	margin:0;
 	padding: 0;
 	font-weight: bold;
@@ -98,8 +103,8 @@ h1{
 	width: 100%;
 	margin-bottom: 20px;
 	
-}
-.passbox input[type="password"]{
+}*/
+/*.passbox input[type="password"]{
 	border: none;
 	border-bottom: 1px solid #fff;
 	background: transparent;
@@ -112,7 +117,7 @@ h1{
 .passbox input[type="password"]:hover{
 	background: lightgrey;
 	color: black;
-}
+}*/
 
 .regbox input[type="submit"]{
 	border: none;
@@ -133,7 +138,9 @@ h1{
 }
 
 .regbox a{
-	margin-left: 45%;
+	margin-left: 46%;
+	height: 10px;
+	width: auto;
 	text-decoration: none;
 	font-size: 12px;
 	line-height: 20px;

@@ -85,6 +85,9 @@
 					<form action="/purchase" method="POST" class="sale-detail-wrapper">
 						<div style="height:500px;overflow:auto;">
 						<table class="w3-table-all w3--card-4 w3-text-black sale" id="prodtable">
+							<h3>Customer ID:
+								<input type="text" id="customerid" value=""></h3>
+								<br><br>
 							<tr>
 								<th>Product ID</th>
 								<th>Product Name</th>
@@ -126,7 +129,7 @@
 
 		  cell1.innerHTML = id;
 		  cell2.innerHTML = pname;
-		  cell4.innerHTML = "<input type='number' id='qty' class='qty' value='1' min='1' onchange='updatetotal(this.value)'>"
+		  cell4.innerHTML = "<input type='number' id='qty'  class='qty' value='1' min='1' onchange='updatetotal(this.value)'>"
 		  var qty = document.getElementById('qty').value;
 		  num = pprice - (pprice*dprice);
 		  num = Math.round(num * 100)/100
@@ -136,19 +139,15 @@
 		  total()
 		}
 
-
 		function updatetotal(t){
     		var table = document.getElementById('prodtable');
 			var total = 0
 			var newtotal = 0
     		for(let i = 1; i<table.rows.length; i++){
-				
 				table.rows[i].onclick = function(){
 					num1 = Number(table.rows[i].cells[2].innerText)*t;
 					prodtable.rows[i].cells[4].innerHTML = num1.toFixed(2);
-					
 					total= total+Number(table.rows[i].cells[4].innerText)
-					 console.log(total)
 					addtotal(total)
 				};
     		}
@@ -161,8 +160,7 @@
         		total+=Number(table.rows[i].cells[4].innerText)
     		}
     		const totalInput = document.getElementById('total')
-    		totalInput.value=total
-
+    		totalInput.value=total.toFixed(2)
 		}
 
 		function addtotal(r){
@@ -170,13 +168,11 @@
     		let total = 0
     		for(let i = 1; i<table.rows.length; i++){
         		total+=Number(table.rows[i].cells[4].innerText)
-				console.log(r)
     		}
     		const totalInput = document.getElementById('total')
     		totalInput.value=total.toFixed(2)
-
 		}
-
+		
 		function deleteRow(r) {
   			var i = r.parentNode.parentNode.rowIndex;
  			document.getElementById("prodtable").deleteRow(i);

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 23, 2022 at 03:39 PM
+-- Generation Time: Jun 01, 2022 at 08:01 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -20,6 +20,31 @@ SET time_zone = "+00:00";
 --
 -- Database: `gadsms`
 --
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getallemployee` ()  begin 
+SELECT user.user_id, role.role_name, user.firstname, user.lastname,user.address FROM user, role WHERE role.role_id = user.role_id;
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getCustomer` ()  begin 
+   select customer_id, firstname, lastname, address FROM customer;
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_defects` ()  begin 
+select defect_prod_id, prod_detail_id, product_type_id, product_name,defect_prod_desc, quantity, product_price 
+from defect_prod_inventory;
+end$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_products` ()  begin 
+select inventory.product_id, product_type_name, product_name, product_type_desc, stock_quantity, product_price, discount_price 
+from product_type, inventory 
+where product_type.product_type_id = inventory.product_type_id;
+end$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -45,11 +70,11 @@ CREATE TABLE `appointment` (
 --
 
 INSERT INTO `appointment` (`appointment_id`, `customer_id`, `service_id`, `start_date`, `end_date`, `created_date`, `updated_by`, `updated_date`, `device_name`, `status`) VALUES
-(2, 9876, 956374, '2022-05-16', '2022-05-18', '2022-05-16 16:45:55', 'Kent Armelia', '2022-05-23 18:50:55', 'Kent Armelia', 'Done'),
-(3, 33659030, 956374, '2022-05-17', '2022-05-17', '2022-05-17 19:03:55', 'Kent Armelia', '2022-05-23 18:51:11', 'adfssss', 'Done'),
-(5, 33659030, 941563, '2022-05-17', '2022-05-18', '2022-05-17 21:31:38', 'Kent Armelia', '2022-05-23 18:51:16', 'vivo y1', 'Done'),
-(6, 9876, 941563, '2022-05-22', '2022-05-23', '2022-05-22 16:53:40', 'Kent Armelia', '2022-05-23 18:51:18', 'sdfok', 'Done'),
-(7, 9876, 941563, '2022-05-23', '2022-05-23', '2022-05-23 21:14:53', NULL, NULL, 'janet', 'pending');
+(8, 9876, 956374, '2022-05-30', '2022-05-30', '2022-05-30 13:55:50', NULL, NULL, 'oppo s1', 'pending'),
+(9, 9876, 941563, '2022-05-30', '2022-05-30', '2022-05-30 13:56:05', 'Kent Armelia', '2022-05-30 13:57:25', 'sample 2', 'Done'),
+(10, 33659030, 956374, '2022-05-30', '2022-05-30', '2022-05-30 13:56:40', 'Kent Armelia', '2022-05-30 13:57:15', 'sample 3', 'Done'),
+(11, 33659030, 941563, '2022-05-30', '2022-05-30', '2022-05-30 13:56:51', NULL, NULL, 'sample 4', 'pending'),
+(12, 33659030, 941563, '2022-05-31', '2022-05-31', '2022-05-31 15:37:03', 'Kent Armelia', '2022-05-31 15:37:43', 'sample 2', 'Done');
 
 -- --------------------------------------------------------
 
@@ -79,8 +104,7 @@ INSERT INTO `customer` (`customer_id`, `lastname`, `firstname`, `address`, `phon
 (33659030, 'opina', 'james kaiser', 'None', '090241759835', 'jameskaiser@gmail.com', 'lesliejava', 'kaiser123'),
 (47869263, 'armelia', 'angela bianca', 'None', '09164641246', 'biancaarmelia@gmail.com', 'anree', 'sighilak'),
 (59211294, 'Armelia', 'Jeanica Ann', 'None', '09423123582', 'jeannkay06@gmail.com', 'Nica', 'belleame'),
-(69035274, 'abapo', 'joy', 'None', '152352436346', 'joyabapo@gmail.com', 'jepang', 'joyjoy'),
-(93933159, 'pescadero', 'ciara camille', 'madaue city', '120301247', 'ciarapescadero@gmail.com', 'ciarapescadero', 'pescadero');
+(69035274, 'abapo', 'joy', 'None', '152352436346', 'joyabapo@gmail.com', 'jepang', 'joyjoy');
 
 -- --------------------------------------------------------
 
@@ -94,7 +118,7 @@ CREATE TABLE `defect_prod_inventory` (
   `defect_prod_desc` varchar(50) NOT NULL,
   `product_name` varchar(200) NOT NULL,
   `quantity` int(11) NOT NULL,
-  `product_price` double(12,2) NOT NULL,
+  `product_price` double(12,2) DEFAULT NULL,
   `product_type_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -103,8 +127,7 @@ CREATE TABLE `defect_prod_inventory` (
 --
 
 INSERT INTO `defect_prod_inventory` (`defect_prod_id`, `prod_detail_id`, `defect_prod_desc`, `product_name`, `quantity`, `product_price`, `product_type_id`) VALUES
-(2222, 1111, 'Wireless Gaming Mouse, 16K Optical Sensor', 'Logitech G604 LIGHTSPEED', 1, 3795.00, 141859),
-(2226, 1111, 'basta diri guba', 'sample 1', 20, 202345.00, 141857);
+(1, 1, 'basta guba', 'logitech 2', 1, 30000.00, 141859);
 
 -- --------------------------------------------------------
 
@@ -130,9 +153,11 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`product_id`, `product_type_id`, `product_name`, `product_price`, `discount_price`, `stock_quantity`, `create_by`, `create_date`, `updated_by`, `updated_date`) VALUES
-(19293, 141859, 'Logitech G604 LIGHTSPEED', '3795.00', '0.10', 15, 'Chester Ace Saagundo', '2022-04-22 07:02:28', 'Chester Ace Saagundo', '2022-04-22 07:02:28'),
+(19293, 141859, 'Logitech G604 LIGHTSPEED', '3795.00', '0.12', 15, 'Chester Ace Saagundo', '2022-04-22 07:02:28', 'Charles John Cañete', '2022-05-25 22:44:18'),
 (19824, 141857, 'OPPO A94', '15999.00', '0.20', 13, 'Philip Gabriel Bornea', '2022-04-20 11:23:48', 'Charles John Cañete', '2022-05-03 21:09:59'),
-(19958, 141857, 'Samsung 27\" Gaming Monitor', '5457.00', '0.05', 18, 'Charles John Cañete', '2022-04-18 11:47:53', 'Charles John Cañete', '2022-05-03 21:32:54');
+(19958, 141857, 'Samsung 27\" Gaming Monitor', '5457.00', '0.05', 18, 'Charles John Cañete', '2022-04-18 11:47:53', 'Charles John Cañete', '2022-05-03 21:32:54'),
+(54667, 141871, 'kaiserphone', '50000.00', '0.00', 179, 'Charles John Cañete', '2022-05-31 15:29:40', 'Charles John Cañete', '2022-05-31 15:29:40'),
+(68771, 141857, 'oppo 2022', '23000.00', '0.00', 145, 'Charles John Cañete', '2022-05-26 20:26:18', 'Charles John Cañete', '2022-05-26 20:26:18');
 
 -- --------------------------------------------------------
 
@@ -163,7 +188,7 @@ INSERT INTO `product_sale` (`prod_sale_ref_id`, `customer_id`, `created_by`, `cr
 CREATE TABLE `product_sale_detail` (
   `prod_detail_id` int(10) NOT NULL,
   `prod_sale_ref_id` int(10) NOT NULL,
-  `product_type_id` int(10) NOT NULL,
+  `product_id` int(10) NOT NULL,
   `quantity` int(11) NOT NULL,
   `sale_price` decimal(12,2) NOT NULL,
   `created_by` varchar(100) NOT NULL,
@@ -174,8 +199,21 @@ CREATE TABLE `product_sale_detail` (
 -- Dumping data for table `product_sale_detail`
 --
 
-INSERT INTO `product_sale_detail` (`prod_detail_id`, `prod_sale_ref_id`, `product_type_id`, `quantity`, `sale_price`, `created_by`, `created_date`) VALUES
-(1111, 2851, 141859, 15, '3795.00', 'Charles John Cañete', '2022-11-11 13:35:29');
+INSERT INTO `product_sale_detail` (`prod_detail_id`, `prod_sale_ref_id`, `product_id`, `quantity`, `sale_price`, `created_by`, `created_date`) VALUES
+(1, 2851, 19293, 5, '20000.00', 'chester ace saagundo', '2022-05-31 16:43:21'),
+(2, 2851, 54667, 20, '50000.00', 'chester ace saagundo', '2022-05-31 17:07:41');
+
+--
+-- Triggers `product_sale_detail`
+--
+DELIMITER $$
+CREATE TRIGGER `deductQuantity` AFTER INSERT ON `product_sale_detail` FOR EACH ROW begin
+update inventory
+set stock_quantity = stock_quantity - new.quantity
+where product_id = new.product_id;
+end
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -379,9 +417,9 @@ ALTER TABLE `product_sale`
 -- Indexes for table `product_sale_detail`
 --
 ALTER TABLE `product_sale_detail`
-  ADD PRIMARY KEY (`prod_detail_id`,`prod_sale_ref_id`),
+  ADD PRIMARY KEY (`prod_detail_id`),
   ADD KEY `prod_sale_ref_id` (`prod_sale_ref_id`),
-  ADD KEY `product_type_id` (`product_type_id`);
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indexes for table `product_type`
@@ -439,13 +477,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `appointment_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `appointment_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `defect_prod_inventory`
 --
 ALTER TABLE `defect_prod_inventory`
-  MODIFY `defect_prod_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2229;
+  MODIFY `defect_prod_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `product_sale_detail`
+--
+ALTER TABLE `product_sale_detail`
+  MODIFY `prod_detail_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `service_sale_detail`
@@ -469,7 +513,7 @@ ALTER TABLE `appointment`
 --
 ALTER TABLE `defect_prod_inventory`
   ADD CONSTRAINT `defect_prod_inventory_ibfk_1` FOREIGN KEY (`prod_detail_id`) REFERENCES `product_sale_detail` (`prod_detail_id`),
-  ADD CONSTRAINT `product_type_id` FOREIGN KEY (`product_type_id`) REFERENCES `product_type` (`product_type_id`);
+  ADD CONSTRAINT `defect_prod_inventory_ibfk_2` FOREIGN KEY (`product_type_id`) REFERENCES `product_type` (`product_type_id`);
 
 --
 -- Constraints for table `inventory`
@@ -488,7 +532,7 @@ ALTER TABLE `product_sale`
 --
 ALTER TABLE `product_sale_detail`
   ADD CONSTRAINT `product_sale_detail_ibfk_1` FOREIGN KEY (`prod_sale_ref_id`) REFERENCES `product_sale` (`prod_sale_ref_id`),
-  ADD CONSTRAINT `product_sale_detail_ibfk_2` FOREIGN KEY (`product_type_id`) REFERENCES `product_type` (`product_type_id`);
+  ADD CONSTRAINT `product_sale_detail_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `inventory` (`product_id`);
 
 --
 -- Constraints for table `service`

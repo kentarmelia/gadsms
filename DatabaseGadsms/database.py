@@ -197,18 +197,31 @@ def getcustomer(username)->list:
 	return slist
 
 def getviewcustomer()->list:
-	sql:str = f"SELECT `customer_id`,`firstname`,`lastname`,`address` FROM `customer`" #"SELECT user.user_id, role.role_name, user.firstname, user.lastname,user.address FROM `user`, `role` WHERE role.role_id = user.role_id"
+	# sql:str = f"call getCustomer()" #"SELECT user.user_id, role.role_name, user.firstname, user.lastname,user.address FROM user, role WHERE role.role_id = user.role_id"
 	cursor = DATABASE.cursor(dictionary=True)
-	cursor.execute(sql)
-	slist:list = cursor.fetchall()
+	cursor.callproc('getCustomer')
+	# slist:list = cursor.stored_results()
+
+	for result in cursor.stored_results():
+		slist = result.fetchall()
+
 	cursor.close()
 	return slist
 
 def getallemployee()->list:
-	sql:str = f"SELECT user.user_id, role.role_name, user.firstname, user.lastname,user.address FROM `user`, `role` WHERE role.role_id = user.role_id" #"SELECT user.user_id, role.role_name, user.firstname, user.lastname,user.address FROM `user`, `role` WHERE role.role_id = user.role_id"
+	# sql:str = f"SELECT user.user_id, role.role_name, user.firstname, user.lastname,user.address FROM user, role WHERE role.role_id = user.role_id" #"SELECT user.user_id, role.role_name, user.firstname, user.lastname,user.address FROM user, role WHERE role.role_id = user.role_id"
+	# cursor = DATABASE.cursor(dictionary=True)
+	# cursor.execute(sql)
+	# slist:list = cursor.fetchall()
+	# cursor.close()
+	# return slist
 	cursor = DATABASE.cursor(dictionary=True)
-	cursor.execute(sql)
-	slist:list = cursor.fetchall()
+	cursor.callproc('getallemployee')
+	# slist:list = cursor.stored_results()
+
+	for result in cursor.stored_results():
+		slist = result.fetchall()
+
 	cursor.close()
 	return slist
 
@@ -221,20 +234,40 @@ def getstaff(username)->list:
 	return slist
 
 def get_products()->list:
-	sql:str = f"select inventory.product_id, product_type_name, product_name, product_type_desc, stock_quantity, product_price, discount_price from product_type, inventory where product_type.product_type_id = inventory.product_type_id"
+	# sql:str = f"select inventory.product_id, product_type_name, product_name, product_type_desc, stock_quantity, product_price, discount_price from product_type, inventory where product_type.product_type_id = inventory.product_type_id"
+	# cursor = DATABASE.cursor(dictionary=True)
+	# cursor.execute(sql)
+	# elist:list = cursor.fetchall()
+	# cursor.close()
+	# return elist
+
 	cursor = DATABASE.cursor(dictionary=True)
-	cursor.execute(sql)
-	elist:list = cursor.fetchall()
+	cursor.callproc('get_products')
+	# slist:list = cursor.stored_results()
+
+	for result in cursor.stored_results():
+		slist = result.fetchall()
+
 	cursor.close()
-	return elist
+	return slist
 
 def get_defects()->list:
-	sql:str = f"select defect_prod_id, prod_detail_id, product_type_id, product_name,defect_prod_desc, quantity, product_price from defect_prod_inventory;"
+	# sql:str = f"select defect_prod_id, prod_detail_id, product_type_id, product_name,defect_prod_desc, quantity, product_price from defect_prod_inventory;"
+	# cursor = DATABASE.cursor(dictionary=True)
+	# cursor.execute(sql)
+	# elist:list = cursor.fetchall()
+	# cursor.close()
+	# return elist
+
 	cursor = DATABASE.cursor(dictionary=True)
-	cursor.execute(sql)
-	elist:list = cursor.fetchall()
+	cursor.callproc('get_defects')
+	# slist:list = cursor.stored_results()
+
+	for result in cursor.stored_results():
+		slist = result.fetchall()
+
 	cursor.close()
-	return elist
+	return slist
 
 def get_custapp(username)->list:
 	sql:str = f"select a.appointment_id, s.service_id, st.service_type_name, a.device_name, a.start_date, a.end_date, a.status, a.updated_by from appointment a, service s, service_type st, customer c where a.service_id = s.service_id AND s.service_type_id = st.service_type_id AND a.customer_id = c.customer_id && c.username = '{username}';"

@@ -82,10 +82,19 @@
 							{{ value | upper }}
 						</td>
 						{% endfor %}
+						{% for key,value in item.items() %}
+						{%if value == "pending"%}
+							<td>
+								<button onclick="edit_appoint('{{item['appointment_id']}}','{{item['service_id']}}','{{item['start_date']}}','{{item['end_date']}}','{{item['device_name']}}')">&#9998;</button>
+								<button onclick="deleteappointment({{item['appointment_id']}})">&times;</button>				
+							</td>
+							{%endif%}
+						{%if value == "Done"%}
 						<td>
-							<button onclick="edit_appoint('{{item['appointment_id']}}','{{item['service_id']}}','{{item['start_date']}}','{{item['end_date']}}','{{item['device_name']}}')">&#9998;</button>
 							<button onclick="deleteappointment({{item['appointment_id']}})">&times;</button>				
 						</td>
+						{%endif%}
+						{% endfor %}
 					</tr>
 					{% endfor %}
 				</table>

@@ -83,6 +83,17 @@ def DELETEDATA(table:str,idno:int):
 		return False
 	return True
 
+def DELETEDATA2(table:str,idno:int):
+	try:
+		sql:str = f"DELETE FROM `{table}` WHERE `prod_detail_id`={idno}"
+		cursor = DATABASE.cursor()
+		cursor.execute(sql)
+		DATABASE.commit()
+		cursor.close()
+	except Exception:
+		return False
+	return True
+
 def DELETEdefect(table:str,idno:int):
 	try:
 		sql:str = f"DELETE FROM `{table}` WHERE `defect_prod_id`={idno}"
@@ -118,6 +129,30 @@ def addproducts(data,flname,dt_string)->bool:
 	DATABASE.commit()
 	cursor.close()
 	okey=True
+	return okey
+
+def addpurchase(psaleid,pid,qty,ptotal,flname,dt_string)->bool:
+	try:
+		sql = f"INSERT INTO `product_sale_detail` (`prod_sale_ref_id`,`product_id`,`quantity`,`sale_price`,`created_by`,`created_date`) VALUE ('{psaleid}','{pid}','{qty}','{ptotal}','{flname}','{dt_string}')"
+		cursor = DATABASE.cursor()
+		cursor.execute(sql)
+		DATABASE.commit()
+		cursor.close()
+		okey=True
+	except Exception:
+		return False
+	return okey
+
+def addproductsale(prodsaleid,customerid,uname,dt_string)->bool:
+	try:
+		sql = f"INSERT INTO `product_sale` (`prod_sale_ref_id`,`customer_id`,`created_by`,`created_data`) VALUE ('{prodsaleid}','{customerid}','{uname}','{dt_string}')"
+		cursor = DATABASE.cursor()
+		cursor.execute(sql)
+		DATABASE.commit()
+		cursor.close()
+		okey=True
+	except Exception:
+		return False
 	return okey
 
 def adddefect(data)->bool:
@@ -180,6 +215,19 @@ def updateappointment(table:str,id:int,fields:list=[],new_data:list=[])->bool:
 		flds:str="`=%s, `".join(fields)
 		flds+="`=%s"
 		sql:str=f"UPDATE `{table}` SET `{flds} WHERE `appointment_id`={id}"
+		cursor = DATABASE.cursor()
+		cursor.execute(sql,new_data)
+		DATABASE.commit()
+		cursor.close()
+		okey=True
+	return okey
+
+def updatepurchase(table:str,id:int,fields:list=[],new_data:list=[])->bool:
+	okey:bool=False
+	if len(fields)==len(new_data):
+		flds:str="`=%s, `".join(fields)
+		flds+="`=%s"
+		sql:str=f"UPDATE `{table}` SET `{flds} WHERE `prod_detail_id`={id}"
 		cursor = DATABASE.cursor()
 		cursor.execute(sql,new_data)
 		DATABASE.commit()
@@ -269,6 +317,14 @@ def get_defects()->list:
 	cursor.close()
 	return slist
 
+def get_sale_details(psaleid)->list:
+	sql:str = f"select psd.prod_detail_id, psd.product_id, i.product_name, i.product_price, psd.quantity, psd.sale_price from product_sale_detail psd, inventory i where  psd.product_id = i.product_id and psd.prod_sale_ref_id = '{psaleid}';"
+	cursor = DATABASE.cursor(dictionary=True)
+	cursor.execute(sql)
+	elist:list = cursor.fetchall()
+	cursor.close()
+	return elist
+
 def get_custapp(username)->list:
 	sql:str = f"select a.appointment_id, s.service_id, st.service_type_name, a.device_name, a.start_date, a.end_date, a.status, a.updated_by from appointment a, service s, service_type st, customer c where a.service_id = s.service_id AND s.service_type_id = st.service_type_id AND a.customer_id = c.customer_id && c.username = '{username}';"
 	cursor = DATABASE.cursor(dictionary=True)
@@ -292,3 +348,43 @@ def getallcustapp2()->list:
 	elist:list = cursor.fetchall()
 	cursor.close()
 	return elist
+
+def get_product_sale()->list:
+	sql:str = f"select * from product_sale;"
+	cursor = DATABASE.cursor(dictionary=True)
+	cursor.execute(sql)
+	elist:list = cursor.fetchall()
+	cursor.close()
+	return elist
+
+def get_product_sale2(pid)->list:
+	sql:str = f"select * from product_sale where prod_sale_ref_id = '{pid}';"
+	cursor = DATABASE.cursor(dictionary=True)
+	cursor.execute(sql)
+	elist:list = cursor.fetchall()
+	cursor.close()
+	return elist
+
+def get_customerpurchase(pid)->list:
+	sql:str = f"select p.prod_detail_id, i.product_name, p.quantity, p.sale_price from product_sale_detail p, inventory i where i.product_id = p.product_id AND prod_sale_ref_id = '{pid}';"
+	cursor = DATABASE.cursor(dictionary=True)
+	cursor.execute(sql)
+	elist:list = cursor.fetchall()
+	cursor.close()
+	return elist
+
+def search(table,column,searched)->list:
+	sql:str = f"select * from {table} where {column} like '%{searched}%';"
+	cursor = DATABASE.cursor(dictionary=True)
+	cursor.execute(sql)
+	elist:list = cursor.fetchall()
+	cursor.close()
+	return elist
+
+def getnumbers(table)->int:
+	sql:str=f"SELECT COUNT(*) FROM {table};"
+	conn=DATABASE.cursor(dictionary=True)
+	conn.execute(sql)
+	slist=conn.fetchone()
+	conn.close()
+	return slist

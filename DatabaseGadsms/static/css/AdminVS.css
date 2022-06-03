@@ -73,13 +73,22 @@ img{
 }
 
 .table-left-side {
-	margin-left: 40px;
-	width: 40%;
+	margin-left: 52%;
+	width: 35%;
+	position: fixed;
+}
+
+.total {
+	margin-top: -20%;
+	margin-left: 6%;
+	position: absolute;
+	color:white;
 }
 
 .sale-detail-container {
 	background-color: #4b4276;;
 	width: 100%;
+	height: 100%;
 }
 
 .sale-detail-container h2 {

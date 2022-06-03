@@ -11,6 +11,53 @@
 	font-family: sans-serif;
 
 }
+.cus-id{
+	margin-top: -6%;
+	margin-left: 61%;
+	
+	color: white;
+
+}
+.cus-id-bar{
+	
+	margin-left: auto;
+	margin-right: 5px;
+	padding: 6.5px 20px;
+	font-size: 16px;
+}
+
+.bar{
+ 	width: 32%;
+}
+
+.form-cus{
+	position: absolute;
+	margin-left: .1%;
+	margin-top: -.4%;
+}
+.prod-id{
+	
+	margin-left: 76px;
+	color: white;
+}
+
+.custom-id input{
+	
+	width: 130px;
+}
+
+.check-btn{
+	position: absolute;
+	margin-left: 102%;
+	margin-top: -16.5%;
+	
+	
+}
+.check-btn-in{
+	height: 50%;
+}
+
+
 button{
 	margin-left: 1550px;
 	border-radius: 10px;
@@ -74,14 +121,16 @@ img{
 }
 
 .table-left-side {
-	margin-left: 40px;
-	width: 40%;
+	margin-left: 47.3%;
+	width: 39%;
+	position: absolute;
 }
 
 .sale-detail-container {
 	background-color: #4b4276;;
 	width: 100%;
 }
+
 
 .sale-detail-container h2 {
 	background-color: #353658;

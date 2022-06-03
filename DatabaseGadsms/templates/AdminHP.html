@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<script src="https://kit.fontawesome.com/05f5e3eb98.js" crossorigin="anonymous"></script>
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <body>
 	<div class="wrapper">
 		<div class="sidebar">
@@ -53,7 +54,98 @@
 		<br>
 		<div class="table-container">
 			<h1>Overview</h1>
+			<div class="content-container">
+				<div class="content-box">
+					<i class="fa-solid fa-user"></i>
+					{% for key, value in cnum.items() %}
+ 					<h1>{{value}}</h1>
+					{% endfor %}
+					<h3>Customers</h3>
+				</div>
+				<div class="content-box">
+					<i class="fa-solid fa-laptop"></i>
+					{% for key, value in pnum.items() %}
+ 					<h1>{{value}}</h1>
+					{% endfor %}
+					<h3>Products</h3>
+				</div>
+				<div class="content-box">
+					<i class="fa-solid fa-user-tie"></i>
+					{% for key, value in enum.items() %}
+ 					<h1>{{value}}</h1>
+					{% endfor %}
+					<h3>Employees</h3>
+				</div>
+			</div>
 			<h1>Monthly Sales</h1>
+			<div class="sales-content-container" style="height: auto; padding-bottom: 150px;">
+				<div class="sales-container">
+					<h3>Top Products</h3>
+					<canvas id="myChart" style="width:100%;"></canvas>
+					<script>
+						var xValues = ["Product Name 1", "Product Name 2", "Product Name 3", "Product Name 4", "Product Name 5"];
+						var yValues = [55, 49, 44, 24, 15];
+						var barColors = [
+						  "#b91d47",
+						  "#00aba9",
+						  "#2b5797",
+						  "#e8c3b9",
+						  "#1e7145"
+						];
+
+						new Chart("myChart", {
+						  type: "pie",
+						  data: {
+						    labels: xValues,
+						    datasets: [{
+						      backgroundColor: barColors,
+						      data: yValues
+						    }]
+						  },
+						  options: {
+						    title: {
+						      display: false,
+						      text: ""
+						    }
+						  }
+						});
+					</script>
+				</div>
+				<div class="sales-container" style="width: 1000px;">
+					<h3>Top Employees</h3>
+					<canvas id="myBarChart" style="width:100%;"></canvas>
+
+					<script>
+						var xValues = ["Employee Name 1", "Employee Name 2", "Employee Name 3", "Employee Name 4", "Employee Name 5"];
+						var yValues = [55, 49, 44, 24, 15];
+						var barColors = [
+						  "#b91d47",
+						  "#00aba9",
+						  "#2b5797",
+						  "#e8c3b9",
+						  "#1e7145"
+						];
+
+						new Chart("myBarChart", {
+						  type: "bar",
+						  data: {
+						    labels: xValues,
+						    datasets: [{
+						      backgroundColor: barColors,
+						      data: yValues
+						    }]
+						  },
+						  options: {
+						    legend: {display: false},
+						    title: {
+						      display: false,
+						      text: ""
+						    }
+						  }
+						});
+					</script>
+				</div>
+			</div>
 		</div>	
 	</div>
 </body>

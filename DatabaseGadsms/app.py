@@ -1,6 +1,8 @@
 from flask import Flask,render_template,request,redirect,url_for,session
-from database import ValidateUser,Validaterole,Validatecustomer,SAVE_DB,getcustomer,getstaff,get_products,addproducts,read_userName,DELETEDATA,updateproducts,get_defects,getviewcustomer,getallemployee,validateproddetail,adddefect,DELETEdefect,updatedefects,get_custapp,read_cusid,addapp,DELETEappoint,updateappointment,getallcustapp,getallcustapp2
+from database import ValidateUser,Validaterole,Validatecustomer,SAVE_DB,getcustomer,getstaff,get_products,addproducts,read_userName,DELETEDATA,updateproducts,get_defects,getviewcustomer,getallemployee,validateproddetail,adddefect,DELETEdefect,updatedefects,get_custapp,read_cusid,addapp,DELETEappoint,updateappointment,getallcustapp,getallcustapp2,addproductsale,addpurchase,get_sale_details,DELETEDATA2,updatepurchase,get_product_sale,get_customerpurchase,get_product_sale2,getnumbers
 from datetime import datetime 
+import random
+
 app = Flask(__name__)
 app.secret_key = "sd455rsdgf"
 now = datetime.now()
@@ -100,7 +102,13 @@ def adminhp():
     if "username" in session:
         username = session["username"]
         slist = getstaff(username)
-        return render_template("AdminHP.html",slist = slist)
+        custable = "customer"
+        prodtable = "inventory"
+        emptable = "user"
+        customernumber = getnumbers(custable)
+        productnumber = getnumbers(prodtable)
+        employeenumber = getnumbers(emptable)
+        return render_template("AdminHP.html",slist = slist,cnum = customernumber,pnum = productnumber,enum = employeenumber)
     else:
         if "username" in session:
             return redirect(url_for("adminhp"))
@@ -137,8 +145,26 @@ def adminvc():
 def adminvs():
     if "username" in session:
         username = session["username"]
+        hlist:list=['Sale Reference ID','Customer ID','created by','created date','view']
         slist = getstaff(username)
-        return render_template("AdminVS.html",slist = slist)
+        plist = get_product_sale()
+        return render_template("AdminVS.html",slist = slist,pageheader = hlist,plist = plist,ok = "")
+    else:
+        if "username" in session:
+            return redirect(url_for("adminvs"))
+        return redirect(url_for("login"))
+
+@app.route("/saledetails",methods=["GET"])
+def saledetails():
+    if "username" in session:
+        username = session["username"]
+        hlist:list=['Sale Reference ID','Customer ID','created by','created date','view']
+        id:int=request.args.get("id")
+        purlist = get_customerpurchase(id)
+        slist = getstaff(username)
+        plist = get_product_sale()
+        plist2 = get_product_sale2(id)
+        return render_template("AdminVS.html",slist = slist,pageheader = hlist,plist = plist,purlist = purlist,plist2 = plist2,ok = "ok")
     else:
         if "username" in session:
             return redirect(url_for("adminvs"))
@@ -186,9 +212,88 @@ def sellersi():
             return redirect(url_for("sellersi"))
         return redirect(url_for("login"))
 
+@app.route("/sellersi//")
+def sellersi3():
+    return redirect(url_for("sellersi"))
+
+@app.route("/pay")
+def pay():
+    return redirect(url_for("sellersi"))
+
+@app.route("/sellersi/<psaleid>/<customerid>")
+def sellersi2(psaleid,customerid):
+    if "username" in session:
+        uname = request.args.get('uname', None)
+        username = session["username"]
+        hlist:list=['PRODUCT ID','PRODUCT TYPE NAME','PRODUCT NAME','PRODUCT DESC.','STOCK QTY','PRODUCT PRICE','DISCOUNT PRICE','ACTION']
+        plist = get_products()
+        slist = getstaff(username)
+        purlist = get_sale_details(psaleid)
+        return render_template("SellerSI.html",slist = slist,pageheader = hlist,plist = plist,uname=uname,numpsaleid=psaleid,customerid=customerid,purlist=purlist)
+    else:
+        if "username" in session:
+            return redirect(url_for("sellersi"))
+        return redirect(url_for("login"))
+
 @app.route("/purchase",methods=["POST"])
 def purchase():
-    return "ok"
+    if "username" in session:
+        username = session["username"]
+        uname = read_userName(username)
+        flag:int=int(request.form["flag"])
+        pid=request.form["pid"]
+        psid=request.form["psid"]
+        psaleid=request.form["psaleid"]
+        customerid=request.form["customerid"]
+        if customerid == "":
+            return redirect(url_for("sellersi"))
+        ptotal:float=float(request.form["ptotal"])
+        qty:int=int(request.form["qty"])
+        dt_string = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        newptotal=ptotal*qty
+        fields:list=['prod_sale_ref_id','product_id','quantity','sale_price','created_by','created_date']
+        data:list=[psaleid,pid,qty,newptotal,uname,dt_string]
+        if flag == 0:
+            okey:bool=addpurchase(psaleid,pid,qty,newptotal,uname,dt_string)
+            if okey:
+                message = "Product Added"
+            else:
+                message = "Error adding Product"
+        if flag == 1:
+            okey:bool=updatepurchase("product_sale_detail",psid,fields,data)
+            if okey:
+                message = "Product updated"
+            else:
+                message = "Error Updating Product"
+        return redirect(url_for("sellersi2",psaleid=psaleid,customerid=customerid))
+    else:
+        return redirect(url_for("login"))
+
+@app.route("/checkcustomer",methods=["POST"])
+def checkcustomer():
+    if "username" in session:
+        username = session["username"]
+        uname = read_userName(username)
+        customerid:str=request.form["customerid"]
+        if customerid == "":
+            return redirect(url_for("sellersi"))
+        num = random.randint(100,99999)
+        flagg:int=int(request.form["flagg"])
+        dt_string = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        if flagg == 0:
+            okey:bool=addproductsale(num,customerid,uname,dt_string)
+            if okey:
+                message = "customer id exist"
+            else:
+                return redirect(url_for("sellersi"))
+        hlist:list=['PRODUCT ID','PRODUCT TYPE NAME','PRODUCT NAME','PRODUCT DESC.','STOCK QTY','PRODUCT PRICE','DISCOUNT PRICE','ACTION']
+        plist = get_products()
+        slist = getstaff(username)
+        return render_template("SellerSI.html",slist = slist,pageheader = hlist,plist = plist,uname=uname,message=message,numpsaleid = num,customerid = customerid)
+    else:
+        if "username" in session:
+            return redirect(url_for("sellersi"))
+        return redirect(url_for("login"))
 
 @app.route("/sellervc")
 def sellervc():
@@ -296,6 +401,15 @@ def deleteappointment():
     else:
         return redirect(url_for("customerap",message="Error Removing Appointment"))
 
+@app.route("/deletepurchase/<psaleid>/<customerid>",methods=["GET"])
+def deletepurchase(psaleid,customerid):
+    id:int=request.args.get("id")
+    okey:bool = DELETEDATA2("product_sale_detail",id)
+    if okey:
+        return redirect(url_for("sellersi2",psaleid=psaleid,customerid=customerid,message="Product Removed"))
+    else:
+        return redirect(url_for("sellersi2",psaleid=psaleid,customerid=customerid,message="Error Removing Product"))
+
 @app.route("/doneappointment",methods=["GET"])
 def doneappointment():
     if "username" in session:
@@ -312,6 +426,7 @@ def doneappointment():
             return redirect(url_for("technicianap",message="Error Removing Appointment"))
     else:
         return redirect(url_for("login"))
+
 @app.route("/adddefects",methods=["POST","GET"])
 def adddefects():
     firstname = ""

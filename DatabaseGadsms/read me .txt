@@ -1,0 +1,39 @@
+----- you can watch this demo -----
+https://youtu.be/5Jt2mZPPJdE
+
+
+
+how to use
+
+1. create your database first named: gadsms
+
+2. in gadsms database click --> import tab --> choose File --> find gadsms.sql in folder --> click go button at lower right
+
+---------- CHECK IF INSTALLED PYTHON -----------
+1.Open Command Prompt > Type Python Or py > Hit Enter If Python Is Installed it will show the version Details Otherwise It will Open Microsoft Store To Download From Microsoft Store
+
+2.Just go in cmd and type where python if it installed it will open a prompt
+
+---------- INSTALL FLASK & MYSQL-CONNECT-DATABASE -----------
+
+1.in digivet folder click the path folder and change to cmd
+2.type this: pip install flask
+3.thpe this: pip install mysql-connector-python
+
+---------- OPEN THE APP.PY FILE -----------
+1.follow this path in digivetclinic folder: gadsms > venv > Scripts > on path folder click and type cmd
+
+2.type: activate 
+
+(venv) <-- this must appear if not type again activate
+
+3.type this (2x): cd.. 
+
+4.type: py app.py
+
+5.highlight http:/<ip address>:5000 (to copy just click enter)
+
+6.open browser and paste the url
+
+
+

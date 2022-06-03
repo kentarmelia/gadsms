@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 01, 2022 at 08:01 AM
+-- Generation Time: Jun 03, 2022 at 07:03 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -74,7 +74,7 @@ INSERT INTO `appointment` (`appointment_id`, `customer_id`, `service_id`, `start
 (9, 9876, 941563, '2022-05-30', '2022-05-30', '2022-05-30 13:56:05', 'Kent Armelia', '2022-05-30 13:57:25', 'sample 2', 'Done'),
 (10, 33659030, 956374, '2022-05-30', '2022-05-30', '2022-05-30 13:56:40', 'Kent Armelia', '2022-05-30 13:57:15', 'sample 3', 'Done'),
 (11, 33659030, 941563, '2022-05-30', '2022-05-30', '2022-05-30 13:56:51', NULL, NULL, 'sample 4', 'pending'),
-(12, 33659030, 941563, '2022-05-31', '2022-05-31', '2022-05-31 15:37:03', 'Kent Armelia', '2022-05-31 15:37:43', 'sample 2', 'Done');
+(13, 33659030, 941563, '2022-06-02', '2022-06-02', '2022-06-02 12:56:38', NULL, NULL, 'sample 2', 'pending');
 
 -- --------------------------------------------------------
 
@@ -153,11 +153,11 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`product_id`, `product_type_id`, `product_name`, `product_price`, `discount_price`, `stock_quantity`, `create_by`, `create_date`, `updated_by`, `updated_date`) VALUES
-(19293, 141859, 'Logitech G604 LIGHTSPEED', '3795.00', '0.12', 15, 'Chester Ace Saagundo', '2022-04-22 07:02:28', 'Charles John Cañete', '2022-05-25 22:44:18'),
-(19824, 141857, 'OPPO A94', '15999.00', '0.20', 13, 'Philip Gabriel Bornea', '2022-04-20 11:23:48', 'Charles John Cañete', '2022-05-03 21:09:59'),
-(19958, 141857, 'Samsung 27\" Gaming Monitor', '5457.00', '0.05', 18, 'Charles John Cañete', '2022-04-18 11:47:53', 'Charles John Cañete', '2022-05-03 21:32:54'),
-(54667, 141871, 'kaiserphone', '50000.00', '0.00', 179, 'Charles John Cañete', '2022-05-31 15:29:40', 'Charles John Cañete', '2022-05-31 15:29:40'),
-(68771, 141857, 'oppo 2022', '23000.00', '0.00', 145, 'Charles John Cañete', '2022-05-26 20:26:18', 'Charles John Cañete', '2022-05-26 20:26:18');
+(19293, 141859, 'Logitech G604 LIGHTSPEED', '3795.00', '0.12', 14, 'Chester Ace Saagundo', '2022-04-22 07:02:28', 'Charles John Cañete', '2022-05-25 22:44:18'),
+(19824, 141857, 'OPPO A94', '15999.00', '0.20', 8, 'Philip Gabriel Bornea', '2022-04-20 11:23:48', 'Charles John Cañete', '2022-05-03 21:09:59'),
+(19958, 141857, 'Samsung 27\" Gaming Monitor', '5457.00', '0.05', 14, 'Charles John Cañete', '2022-04-18 11:47:53', 'Charles John Cañete', '2022-05-03 21:32:54'),
+(54667, 141871, 'kaiserphone', '50000.00', '0.00', 158, 'Charles John Cañete', '2022-05-31 15:29:40', 'Charles John Cañete', '2022-05-31 15:29:40'),
+(68771, 141857, 'oppo 2022', '23000.00', '0.00', 134, 'Charles John Cañete', '2022-05-26 20:26:18', 'Charles John Cañete', '2022-05-26 20:26:18');
 
 -- --------------------------------------------------------
 
@@ -177,7 +177,8 @@ CREATE TABLE `product_sale` (
 --
 
 INSERT INTO `product_sale` (`prod_sale_ref_id`, `customer_id`, `created_by`, `created_data`) VALUES
-(2851, 9876, 'Charles John Cañete', '2022-11-11 13:23:44');
+(2851, 9876, 'Charles John Cañete', '2022-11-11 13:23:44'),
+(91827, 9876, 'Chester Ace Saagundo', '2022-06-03 19:26:36');
 
 -- --------------------------------------------------------
 
@@ -201,7 +202,8 @@ CREATE TABLE `product_sale_detail` (
 
 INSERT INTO `product_sale_detail` (`prod_detail_id`, `prod_sale_ref_id`, `product_id`, `quantity`, `sale_price`, `created_by`, `created_date`) VALUES
 (1, 2851, 19293, 5, '20000.00', 'chester ace saagundo', '2022-05-31 16:43:21'),
-(2, 2851, 54667, 20, '50000.00', 'chester ace saagundo', '2022-05-31 17:07:41');
+(2, 2851, 54667, 20, '50000.00', 'chester ace saagundo', '2022-05-31 17:07:41'),
+(153, 91827, 19958, 1, '5184.15', 'Chester Ace Saagundo', '2022-06-03 19:26:38');
 
 --
 -- Triggers `product_sale_detail`
@@ -211,6 +213,28 @@ CREATE TRIGGER `deductQuantity` AFTER INSERT ON `product_sale_detail` FOR EACH R
 update inventory
 set stock_quantity = stock_quantity - new.quantity
 where product_id = new.product_id;
+end
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `retrieveQuantity` AFTER DELETE ON `product_sale_detail` FOR EACH ROW begin
+update inventory
+set stock_quantity = stock_quantity + old.quantity
+where product_id = old.product_id;
+end
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `updateQuantity` AFTER UPDATE ON `product_sale_detail` FOR EACH ROW begin
+if new.quantity > old.quantity then
+update inventory
+set stock_quantity = stock_quantity - (new.quantity - old.quantity)
+where product_id = new.product_id;
+else
+update inventory
+set stock_quantity = stock_quantity + (old.quantity - new.quantity)
+where product_id = new.product_id;
+end if;
 end
 $$
 DELIMITER ;
@@ -477,7 +501,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `appointment_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `appointment_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `defect_prod_inventory`
@@ -489,7 +513,7 @@ ALTER TABLE `defect_prod_inventory`
 -- AUTO_INCREMENT for table `product_sale_detail`
 --
 ALTER TABLE `product_sale_detail`
-  MODIFY `prod_detail_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `prod_detail_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 
 --
 -- AUTO_INCREMENT for table `service_sale_detail`

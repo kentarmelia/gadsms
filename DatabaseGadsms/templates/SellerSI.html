@@ -73,41 +73,99 @@
 						</td>
 						{% endfor %}
 						<td>
-							<button onclick="sellproduct('{{item['product_id']}}','{{item['product_name']}}','{{item['product_price']}}','{{item['discount_price']}}')">&#x2B;</button>				
+							<button onclick="addquantity('{{item['product_id']}}','{{item['product_price']}}','{{item['discount_price']}}','{{numpsaleid}}','{{customerid}}')">&#x2B;</button>				
 						</td>
 					</tr>
 					{% endfor %}
 				</table>
 			</div>
+			
+			<form action="/checkcustomer" class="form-cus" method="post">
+			<div class="custom-id">
+				<input type="hidden" name="flagg" id="flagg" value="0">
+			<h3><b>Customer ID:</b>
+				<input class="cus-id-bar" type="text" id="customerid" name="customerid" placeholder="" value=""></h3>
+			</div>	
+			<div class="check-btn">
+				<button class="check-btn-in">Check</button>
+			</div>
+			</form>
 			<div class="table-left-side">
 				<div class="sale-detail-container">
 					<h2>CUSTOMER PURCHASES</h2>
-					<form action="/purchase" method="POST" class="sale-detail-wrapper">
 						<div style="height:500px;overflow:auto;">
+							<div class="prod-id"><h3><b>Product Sale ID:</b> {{numpsaleid}}</h3></div>
+							<div class="cus-id"><h3><b>Customer ID:</b> {{customerid}}</h3></div>
 						<table class="w3-table-all w3--card-4 w3-text-black sale" id="prodtable">
-							<h3>Customer ID:
-								<input type="text" id="customerid" value=""></h3>
-								<br><br>
+								<br>
 							<tr>
+								<th>ID</th>
 								<th>Product ID</th>
 								<th>Product Name</th>
 								<th>Price</th>
-								<th style="width: 20%;">Qty</th>
+								<th style="width: 6%;">Qty</th>
 								<th>Price Total</th>
-								<th>Delete</th>
-								
+								<th>Action</th>
 							</tr>
+							{% for item in purlist %}
+							<tr>
+								{% for key,value in item.items() %}
+								<td>
+								{{ value | upper }}
+								</td>
+								{% endfor %}
+								<td>
+									<button onclick="updatequantity('{{item['prod_detail_id']}}','{{item['product_id']}}','{{item['product_price']}}','{{item['quantity']}}','{{item['discount_price']}}','{{numpsaleid}}','{{customerid}}')">&#x2B;</button>				
+									<button onclick="deletepurchase('{{item['prod_detail_id']}}','{{numpsaleid}}','{{customerid}}')">&times;</button>	
+								</td>
+							</tr>
+							{% endfor %}
 						</table>
 						</div>
 						<br>
-						<h3>SubTotal:
-						<input type="text" id="total" value="0" disabled></h3>
+					<form action="/purchase" method="POST" class="sale-detail-wrapper">
+						<h3>SubTotal:<p id="subtotal"></p></h3>
 						<br><br>
 						<button type="submit" name="pay" value="Pay" class="pay-btn">Pay</button>
 					</form>
 				</div>			
 			</div>
 		</div>	
+	</div>
+	<div class="w3-modal" id ="addqty"> 
+		<div class ="w3-modal-content w3-animate-zoom">
+			<div class = "w3-container popup">	
+				<button class="w3-button w3-display-topright" onclick="document.getElementById('addqty').style.display='none'">&times;</button>
+				<h1>ADD QUANTITY</h1>
+				<form action="/purchase" method="post" name="purchase" class="add-purchase-form">
+					<!--Saving Flag-->
+					<!--Flag: '-' add student--->
+					<!--Flag: '1++' update student--->
+					<input type="hidden" name="flag" id="flag" value="0">
+					<input type="hidden" name="psaleid" id="psaleid" value="{{numpsaleid}}">
+					<input type="hidden" name="customerid" id="customerid" value="{{customerid}}">
+					<input type="hidden" name="pid" id="pid">
+					<input type="hidden" name="psid" id="psid">
+					<input type="hidden" name="pname" id="pname">
+					<input type="hidden" name="pprice" id="pprice">
+					<input type="hidden" name="ptotal" id="ptotal">
+					<input type="hidden" name="dprice" id="dprice">
+					<ul>
+						<li>
+							Add Quantity
+							<input type="number" name="qty" id="qty" value="1" required>
+						</li>
+						<br>
+						<br>
+						<li style="text-align: center;">
+		            		<button type="submit" value="SAVE" class="gadsms-button">Save</button>
+		            	</li>
+		            	
+					</ul>
+					<br><br>
+				</form>
+			</div>
+		</div>
 	</div>
 	<script>
 		function sellproduct(id,pname,pprice,dprice) {
@@ -140,7 +198,7 @@
 		}
 
 		function updatetotal(t){
-    		var table = document.getElementById('prodtable');
+    		var table = document.getElementById('sellproduct');
 			var total = 0
 			var newtotal = 0
     		for(let i = 1; i<table.rows.length; i++){
@@ -157,11 +215,11 @@
     		var table = document.getElementById('prodtable');
     		let total = 0
     		for(let i = 1; i<table.rows.length; i++){
-        		total+=Number(table.rows[i].cells[4].innerText)
+        		total+=Number(table.rows[i].cells[5].innerText)
     		}
-    		const totalInput = document.getElementById('total')
-    		totalInput.value=total.toFixed(2)
+    		return total.toFixed(2)
 		}
+		document.getElementById("total").innerHTML = window.total();
 
 		function addtotal(r){
     		var table = document.getElementById('prodtable');
@@ -177,7 +235,63 @@
   			var i = r.parentNode.parentNode.rowIndex;
  			document.getElementById("prodtable").deleteRow(i);
 			total()
-		}			
+		}	
+
+		function addquantity(pid,pprice,dprice,numpsaleid,customerid){
+		var table = document.getElementById("prodtable"); 
+		for (var i = 0; i < prodtable.rows.length; i++){
+			if(table.rows[i].cells[1].innerText == pid){
+				alert('This item is already added to the cart')
+				return
+			}
+		}
+
+		/*
+		document.forms['studentform']['flag'].value = id;
+		document.forms['studentform']['idno'].value = idno;
+		document.forms['studentform']['lastname'].value = lastname;
+		document.forms['studentform']['firstname'].value = firstname;
+		document.forms['studentform']['course'].value = course;
+		document.forms['studentform']['level'].value = level;
+		*/
+		document.getElementById('flag').value=0;
+		document.getElementById('psaleid').value=numpsaleid;
+		document.getElementById('customerid').value=customerid;
+		document.getElementById('pid').value=pid;
+		document.getElementById('pprice').value=pprice-(pprice*dprice);
+		document.getElementById('qty').value=1;
+		document.getElementById('ptotal').value=pprice-(pprice*dprice);
+		document.getElementById('addqty').style.display='block'
+		
+	}
+
+	function updatequantity(psid,pid,pprice,qty,dprice,numpsaleid,customerid){
+
+		/*
+		document.forms['studentform']['flag'].value = id;
+		document.forms['studentform']['idno'].value = idno;
+		document.forms['studentform']['lastname'].value = lastname;
+		document.forms['studentform']['firstname'].value = firstname;
+		document.forms['studentform']['course'].value = course;
+		document.forms['studentform']['level'].value = level;
+		*/
+
+		document.getElementById('flag').value=1;
+		document.getElementById('psaleid').value=numpsaleid;
+		document.getElementById('customerid').value=customerid;
+		document.getElementById('pid').value=pid;
+		document.getElementById('psid').value=psid;
+		document.getElementById('pprice').value=pprice-(pprice*dprice);
+		document.getElementById('qty').value=qty;
+		document.getElementById('ptotal').value=pprice-(pprice*dprice);
+		document.getElementById('addqty').style.display='block'
+		
+	}	
+	function deletepurchase(id,numpsaleid,customerid){
+			var ok=confirm("Delete this Product purchase? =>"+id)
+			if(ok)
+				location.href="/deletepurchase/"+numpsaleid+"/"+customerid+"?id="+id
+		}
 		</script>
 </body>
 </html>

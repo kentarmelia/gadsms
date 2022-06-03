@@ -66,57 +66,92 @@
 					<a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
 				</div>
 				<table class="w3-table-all w3--card-4 w3-text-black">
+					<input type="hidden" name="pid" id="pid" value="">
 					<tr>
-						<th>Sale Reference ID</th>
-						<th>Customer ID</th>
-						<th>Created By</th>
-						<th>Created Date</th>
+						{% for h in pageheader %}
+							<th>{{ h | upper }}</th>
+						{% endfor %}
 					</tr>
+					{% for item in plist %}
 					<tr>
-						<td>Sample ID 1</td>
-						<td>Customer ID 1</td>
-						<td>Sample Name 1</td>
-						<td>5/25/22</td>
+						{% for key,value in item.items() %}
+						<td>
+							{{ value | upper }}
+						</td>
+						{% endfor %}
+						<td>
+							<button onclick="saledetails({{item['prod_sale_ref_id']}})">&#10148;</button>				
+						</td>
 					</tr>
-					<tr>
-						<td>Sample ID 2</td>
-						<td>Customer ID 2</td>
-						<td>Sample Name 2</td>
-						<td>5/25/22</td>
-					</tr>
+					{% endfor %}
 				</table>
 			</div>
 			<div class="table-left-side">
+				<div style="height:700px;overflow:auto;">
 				<div class="sale-detail-container">
 					<h2>SALE DETAILS</h2>
 					<div class="sale-detail-wrapper">
-						<h5>Sale Ref ID: 123123</h5>
-						<h5>Customer ID: 123123</h5>
-						<h5>Created By: Sample Name</h5>
-						<h5 style="padding-bottom: 20px;">Created Date: 05/25/22</h5>
-
-						<table class="w3-table-all w3--card-4 w3-text-black sale">
+					{%if ok == "ok"%}
+						{% for item in plist2 %}
+						{% for key,value in item.items() %}
+						{% if key == "prod_sale_ref_id"%}
+							<h5>Sale Ref ID: {{ value | upper }}</h5>
+						{% elif key == "customer_id"%}
+							<h5>Customer ID: {{ value | upper }}</h5>
+						{% elif key == "created_by"%}
+							<h5>Created by: {{ value | upper }}</h5>
+						{% elif key == "created_data"%}
+							<h5>Created Date: {{ value | upper }}</h5>
+						{%else%}
+						{% endif %}
+						{% endfor %}
+						{% endfor %}
+					{%else%}
+					<h5>Sale Ref ID:</h5>
+					<h5>Customer ID:</h5>
+					<h5>Created by:</h5>
+					<h5>Created Date:</h5>
+					{%endif%}
+						<table class="w3-table-all w3--card-4 w3-text-black sale" id="prodtable">
 							<tr>
+								<th>ID</th>
 								<th>Product Name</th>
 								<th>Qty</th>
 								<th>Price</th>
 							</tr>
+							{% for item in purlist %}
 							<tr>
-								<td>Product 1</td>
-								<td>1</td>
-								<td>100.00</td>
+								{% for key,value in item.items() %}
+								<td>
+								{{ value | upper }}
+								</td>
+								{% endfor %}
 							</tr>
-							<tr>
-								<td>Product 2</td>
-								<td>2</td>
-								<td>200.00</td>
-							</tr>
+							{% endfor %}
 						</table>
-						<h3 style="padding-top: 20px;">Total: 300.00</h3>
+						<br>
 					</div>
+				</div>
+				<div class="total">
+					<h3>Total:<p id="subtotal" ></p></h3>
+				</div>
 				</div>			
 			</div>
 		</div>	
 	</div>
+	<script>
+		function total(){
+    		var table = document.getElementById('prodtable');
+    		let total = 0
+    		for(let i = 1; i<table.rows.length; i++){
+        		total+=Number(table.rows[i].cells[3].innerText)
+    		}
+    		return total.toFixed(2)
+		}
+		document.getElementById("subtotal").innerHTML = window.total();
+		function saledetails(pid){
+			location.href="/saledetails?id="+pid
+		}
+	</script>
 </body>
 </html>
